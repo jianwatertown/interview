@@ -5,7 +5,16 @@ import java.util.*;
 public class WordLadder {
 	
     public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
-    	
+
+    	/**
+    	 * 1. 	Words are organized Graph, so this is Graph traversal problem
+    	 * 2.	Graph needs a set to remember "visited" (this is non-directional graph, but that does not change anything)
+    	 * 
+    	 *  algorithm:
+    	 *	min(begin,end) =  
+    	 * 
+    	 * 
+    	 */
     	// elements can be "found" - return it
     	// or "visited" (weather or not it's found) - do not visit again
     	// or "to be checked"
