@@ -8,52 +8,100 @@ public class WordLadder {
 
     	/**
     	 * 1. 	Words are organized Graph, so this is Graph traversal problem
-    	 * 2.	Graph needs a set to remember "visited" (this is non-directional graph, but that does not change anything)
+    	 * 2.	Graph needs a "visited" set (graph traversal always needs this)
     	 * 
-    	 *  algorithm:
-    	 *	min(begin,end) =  
+    	 * 		DFS approach does not work. Because different travel preferences give you different visiting paths,
+    	 * 		DFS generates local optimal, not necessarily global optimal.
     	 * 
-    	 * 
+    	 *		Algorithm: BFS by level order
+    	 *
+    	 *		1. Iterative: left Queue, right Queue
+    	 *  	2. Recursion
+    	 *  
+    	 *  	Undirected graph
+    	 *  	1. Set "visited" has node seen so far
+    	 *  
+    	 *  	Utility:
+    	 *  	1.	function to find "friends"
+    	 *  
     	 */
-    	// elements can be "found" - return it
-    	// or "visited" (weather or not it's found) - do not visit again
-    	// or "to be checked"
-        Map<String,Integer> found = new HashMap<String,Integer>();
-        Set<String> visited = new HashSet<String>();
-        
-        found.put(beginWord,0);
-        return getEndWith(endWord, wordList,found,visited);
+        return ladderLengthWithTwoQueues(endWord, wordList);
     }
     
-    public int getEndWith(String current, Set<String> dict, Map<String,Integer> found, Set<String> visited){
+    
+    public int ladderLengthWithTwoQueues(String head, Set<String> dict){
 
-    	if(found.containsKey(current)){
-            return found.get(current);
-        }
-        else{
-        	visited.add(current);
-        	
-            int result = Integer.MAX_VALUE;
-            List<String> buddies = findBuddies(current,dict,visited);
-            for(String bud:buddies){
-                result = Math.min(getEndWith(bud,dict,found,visited),result);
-            }
-            found.put(current,result+1);
-            return result+1;
-        }
+    	// init
+    	Queue<String> leftQ = new PriorityQueue<String>();
+    	Queue<String> rightQ = new PriorityQueue<String>();
+    	Set<String> seen = new HashSet<String>();
+    	seen.add(head);
+    	leftQ.add(head);
+    	
+    	int level=0;
+    	
+    	// when either of them is empty
+    	while((!leftQ.isEmpty())|| (!rightQ.isEmpty())){
+    		
+    		// scan left queue
+    		while(!leftQ.isEmpty()){
+    			String current = leftQ.poll();
+    			if(current.equals(head)){
+    				return level;
+    			}
+    			else{
+    				seen.add(current);
+    				for(String child: findBuddies(current,dict,seen)){
+    					rightQ.add(child);
+    				}
+    			}
+    		}
+    		
+    		// going to switch level
+    		level++;
+    		
+    		// right is empty
+    		// scan right queue
+    		while(!rightQ.isEmpty()){
+    			String current = rightQ.poll();
+    			if(current.equals(head)){
+    				return level;
+    			}
+    			else{
+    				seen.add(current);
+    				for(String child: findBuddies(current,dict,seen)){
+    					leftQ.add(child);
+    				}
+    			}
+    		}
+    		
+    		// going to switch level
+    		level++;
+    	}
+    	
+    	// made out of the loop, then it's a dead loop
+    	return -1;
     }
-    
-    public List<String> findBuddies(String s,Set<String> dict, Set<String> visited){
+
+    // Exclude from this set
+    public List<String> findBuddies(String myself, Set<String> wordList, Set<String> excludeSet){
+    	
         List<String> result = new ArrayList<String>();
-        for(int i=0;i<s.length();i++){
+        
+        // for every character in myself
+        for(int i=0;i<myself.length();i++){
+        	
+        	// change it to the 26 character
             for(int j=0;j<26;j++){
-                StringBuffer b =  new StringBuffer(s);
-                char c = (char)('a'+j);
-                b.setCharAt(i,c);
-                if(b.toString()=="hit"){
-                System.out.println(b);}
+
+            	StringBuffer b =  new StringBuffer(myself);
+            	char c = (char)('a'+j);
+            	b.setCharAt(i,c);
+                
                 // if new node and valid
-                if(!visited.contains(b.toString())&&dict.contains(b.toString())){
+                if(!myself.equals(b.toString()) 				// not itself
+                		&& !excludeSet.contains(b.toString())	// not exclude
+                		&& wordList.contains(b.toString())){	// valid
                     result.add(b.toString());
                 }
             }
