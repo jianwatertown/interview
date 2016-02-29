@@ -1,4 +1,4 @@
-package mediam;
+package dynamicProgramming;
 
 import java.util.*;
 
