@@ -1,8 +1,6 @@
 package leetcode.dynamicProgramming;
 
 import java.util.Arrays;
-
-
 /**
  * Key to iterative approach
  * 	1. use min[i] to hold minimum number of coins needed to make i dollars
@@ -35,7 +33,7 @@ public class CoinChange {
         }
         
         // 4. now build up the change, from target value 0 to n
-        for(int target=0;target<=n;target++){
+        for(int target=1;target<=n;target++){
         	// look forward
         	for(int coin:coins){
         		int nextTarget = coin+target;
@@ -49,13 +47,12 @@ public class CoinChange {
     }
     
     public int minCoinsRecursive(int n, int[] coins, int mins[]){
-
     	
-    	// -1 cannot reach
     	// -2 have not checked
-    	if(mins[n]!=-2){
-    		return mins[n];
-    	}
+    	// -1 checked, cannot reach
+    	// 1+ checked, with valid number
+    	if(mins[n]!=-2) 
+    	{return mins[n];}
 
     	if(n==0){
     		mins[0]=0;
