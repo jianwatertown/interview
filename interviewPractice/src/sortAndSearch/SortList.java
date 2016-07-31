@@ -1,4 +1,4 @@
-package leetcode.sorting;
+package sortAndSearch;
 
 import leetcode.dataStructures.ListNode;
 

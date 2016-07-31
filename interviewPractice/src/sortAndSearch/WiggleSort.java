@@ -1,4 +1,4 @@
-package leetcode.sorting;
+package sortAndSearch;
 
 /**
  * 	Given an unsorted array nums, reorder it in-place such that 
