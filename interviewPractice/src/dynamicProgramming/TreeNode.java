@@ -1,4 +1,4 @@
-package leetcode.dynamicProgramming;
+package dynamicProgramming;
 
 public class TreeNode {
     int val;

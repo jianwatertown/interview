@@ -1,4 +1,4 @@
-package careercup.dynamicProgramming;
+package dynamicProgramming;
 
 public class MagicIndex {
 

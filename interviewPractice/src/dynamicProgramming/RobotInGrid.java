@@ -1,4 +1,4 @@
-package careercup.dynamicProgramming;
+package dynamicProgramming;
 
 import java.util.HashMap;
 import java.util.HashSet;

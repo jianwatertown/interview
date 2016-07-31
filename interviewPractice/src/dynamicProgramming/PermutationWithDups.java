@@ -1,4 +1,4 @@
-package leetcode.dynamicProgramming;
+package dynamicProgramming;
 
 public class PermutationWithDups {
 	// 1. compute the hashtable for (character, frequency)
