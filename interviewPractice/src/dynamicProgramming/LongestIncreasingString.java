@@ -3,6 +3,8 @@ package dynamicProgramming;
 import java.util.ArrayList;
 import java.util.List;
 
+import sortAndSearch.BinarySearch;
+
 public class LongestIncreasingString {
 
 	
@@ -38,12 +40,21 @@ Each time we only do one of the two:
 
 (1) if x is larger than all tails, append it, increase the size by 1
 (2) if tails[i-1] < x <= tails[i], update tails[i]
+
+always
+1) binary search find an "i" so that either
+	(a) tails[i-1] < x <= tails[i]
+	or 
+	(b) last index (when it's largest than all trails)
+2) so tails[i] = x, in both (a), (b) cases
+3) in case (a), max_length++
+
 Doing so will maintain the tails invariant. The the final answer is just the size.
  * @param nums
  * @return
  */
 	// O(nLogN) solution
-	public int lengthOfLIS(int[] nums) {
+	public int lengthOfLISFromWeb(int[] nums) {
 	    int[] tails = new int[nums.length];
 	    int size = 0;
 	    for (int x : nums) {
@@ -59,5 +70,32 @@ Doing so will maintain the tails invariant. The the final answer is just the siz
 	        if (i == size) ++size;
 	    }
 	    return size;
+	}
+	
+	// and of the new element element does 2 things
+	// 1) if it is bigger than all, then it can add to the longest and make it even longer. 
+	//	max_length ++;  // can use an index to represent
+	//	largest_element_of_length[max_length+1] = largest_element_of_length[max_length].append()
+	// 2) otherwise, it must be smaller than one of tail, thus that tail can be updated
+	
+	public int lengthOfLIS(int[] nums){
+		
+		int max_length_index = 0;
+		int[] largest_of_length = new int[nums.length];
+		
+		for(int e:nums){
+			
+			// binary search to find the equal index or the immediately smaller one
+			// largest_of_length[i-1]<nums[i]<=largest_of_length[i] or last element
+			// set for both cases
+			int indexOfSmallOrEqual = BinarySearch.findTargetIterative(nums, e);
+			largest_of_length[indexOfSmallOrEqual] = e;
+			
+			// last element
+			if(indexOfSmallOrEqual==max_length_index){
+				max_length_index++;
+			}
+		}
+		return max_length_index;	// is both the index and the length
 	}
 }
