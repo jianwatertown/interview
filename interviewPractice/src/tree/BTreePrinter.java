@@ -88,4 +88,22 @@ class BTreePrinter {
 
         return true;
     }
+    
+	public static Node constructATree(){
+		Node<String> a = new Node("a");
+		Node<String> b = new Node("b");
+		Node<String> c = new Node("c");
+		Node<String> d = new Node("d");
+		Node<String> e = new Node("e");
+		Node<String> f = new Node("f");
+		Node<String> g = new Node("g");
+		a.left = b;
+		a.right = c;
+		b.left = d;
+		b.right = e;
+		c.left = f;
+		c.right = g;
+		return a;
+	}
+
 }
