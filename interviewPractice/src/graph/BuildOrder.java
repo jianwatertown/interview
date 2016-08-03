@@ -1,14 +1,23 @@
 package graph;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+
+// TODO: this algorithm is *not* working
+// as currently, child -> parent
+// so when we have the root of the tree - the parent of everybody
+// we need to either
+// 	1) reconstruct the tree, so parent has a copy of all its children, or
+//  2) do a very expensive sweeping traversal in the leaf node set
+//
+// TODO follow up question, how to invert a tree???
+
 
 public class BuildOrder {
 	
@@ -16,6 +25,7 @@ public class BuildOrder {
 		
 		Map<Character,GraphNode> rootMap = new HashMap<Character,GraphNode>();
 		Map<Character,GraphNode> map = new HashMap<Character,GraphNode>();
+		List<GraphNode> buildorder = new LinkedList<GraphNode>();
 		
 		// 1. build dependency graph
 		for(Pair pair: pairs){
@@ -27,7 +37,7 @@ public class BuildOrder {
 			if(!map.containsKey(pair.parent)){
 				parent = new GraphNode(pair.parent);
 				map.put(pair.parent, parent);
-				rootMap.put(pair.child,parent);
+				rootMap.put(pair.parent,parent);
 			}
 			
 			else{
@@ -44,11 +54,32 @@ public class BuildOrder {
 		}
 		
 		// 2. now generate sequence
-		List<GraphNode> buildorder = new LinkedList<GraphNode>();
-		Set<Character> mySet = getNodeSet(projects);
+		Set<Character> projectsSet = getNodeSet(projects);
 	
 		// 3. go through the list of map and find out stuff
-		// TODO
+		for(GraphNode root:rootMap.values()){
+			DFS(root,buildorder,projectsSet);
+		}
+		
+		// 4. print the set
+		printLinkedList(buildorder);
+	}
+	
+	public void printLinkedList(List<GraphNode> resultList){
+		for(GraphNode n:resultList){
+			System.out.println(n.value+" ");
+		}
+	}
+	
+	public void DFS(GraphNode root, List<GraphNode> resultList,Set<Character> projectSet){
+		if(root!=null){
+			// only add to the list when we have not seen this before
+			if(projectSet.contains(root.value)){
+				resultList.add(root);
+				projectSet.remove(root.value);
+			}
+			DFS(root.dependsOn,resultList,projectSet);
+		}
 	}
 	
 	public Set<Character> getNodeSet(char[] projects){
@@ -84,7 +115,7 @@ public class BuildOrder {
 		Pair p5 = new Pair('c','d');
 		
 		List<Pair> pairs = new ArrayList<Pair>();
-		Character[] projects = {'a','b','c','d','e','f'};
+		char[] projects = {'a','b','c','d','e','f'};
 		
 		pairs.add(p1);
 		pairs.add(p2);
@@ -93,6 +124,6 @@ public class BuildOrder {
 		pairs.add(p5);
 		
 		BuildOrder build = new BuildOrder();
-		build.printBuildOrder(pairs, null);
+		build.printBuildOrder(pairs, projects);
 	}	
 }
