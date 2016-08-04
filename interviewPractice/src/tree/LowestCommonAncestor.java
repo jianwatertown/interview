@@ -3,7 +3,6 @@ package tree;
 public class LowestCommonAncestor {
 
 	// works
-	// leetcode error:https://www.dropbox.com/s/el4z7yoyj6oh9i4/Screenshot%202016-08-03%2023.52.59.png?dl=0
 	public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
 		return containNodeCount(root, p, q).parent;
     }
@@ -21,6 +20,7 @@ public class LowestCommonAncestor {
 		
 		if(leftPair.count==2) return leftPair;
 		if(rightPair.count==2) return rightPair;
+		if(leftPair.count==1 && rightPair.count==1) {return new Pair(2,root);}
 		
 		if(root==p || root==q) {
 			// root is the parent
@@ -33,7 +33,10 @@ public class LowestCommonAncestor {
 			}
 			
 		}
+		// only look at subtree
 		else{
+		    if(leftPair.count==1) {return leftPair;}
+		    if(rightPair.count==1) {return rightPair;}
 			return new Pair(0,null);
 		}
 	}
@@ -50,9 +53,11 @@ public class LowestCommonAncestor {
 	public static void main(String[] args){
 		TreeNode n1 = new TreeNode(1);
 		TreeNode n2 = new TreeNode(2);
-		n1.right = n2;
+		TreeNode n3 = new TreeNode(3);
+		n1.left = n2;
+		n1.right = n3;
 		LowestCommonAncestor a = new LowestCommonAncestor();
-		TreeNode n = a.lowestCommonAncestor(n1, n1, n2);
+		TreeNode n = a.lowestCommonAncestor(n1, n2, n3);
 		System.out.println(n!=null?n.val:"null");
 	}
 }
