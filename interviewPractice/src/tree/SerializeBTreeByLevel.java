@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class SerializeBTree {
+public class SerializeBTreeByLevel {
 	
 	public String serializeTree(Node root){
 		return printTree(root);
@@ -78,7 +78,7 @@ public class SerializeBTree {
 		printer.printNode(root);
 		
 		// end-to-end
-		SerializeBTree test = new SerializeBTree();
+		SerializeBTreeByLevel test = new SerializeBTreeByLevel();
 		String str = test.serializeTree(root);
 		System.out.println(str);
 		Node newRoot = test.deSerializedTree(str);

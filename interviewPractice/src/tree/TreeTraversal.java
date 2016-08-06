@@ -20,6 +20,7 @@ public class TreeTraversal {
 		visit(root);
 	}
 	
+	// Preorder traversal is used to create a copy of the tree
 	public void preOrder(Node root){
 		if(root==null) return;
 		visit(root);
