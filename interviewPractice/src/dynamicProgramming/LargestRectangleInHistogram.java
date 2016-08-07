@@ -183,14 +183,13 @@ public class LargestRectangleInHistogram {
     	// 3. compute the area with middle
     	int leftStart = mid;
     	int rightEnd = mid+1;
-    	int leftHeight = heights[mid];
-    	int rightHeight = heights[mid+1];
-    	int middleArea = 0;
+    	        	
+    	int middleHeight = Math.min(heights[mid],heights[mid+1]);
+    	int middleArea = middleHeight * 2;
+    	
     	
     	while(leftStart>=start && rightEnd<=end){
-    		// 1. only left expand
-    		// TODO
-    	
+    		// TODO finish the complex logic here
     	}
     	
     	return Math.max(Math.max(leftPart, rightPart),middleArea);
