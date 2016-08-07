@@ -100,6 +100,7 @@ public class LargestRectangleInHistogram {
     //	stack saves the *index* of the elements that is *possible* to form an rectangle with current value
     // 
     public int largestRectangleAreaClassicStack(int[] heights) {
+    	
     	Stack<Integer> reacheableFromCurrent = new Stack<Integer>();
     	int max_area = 0;
     	int i = 0;
@@ -117,10 +118,10 @@ public class LargestRectangleInHistogram {
     	while(i<=heights.length){
     		
     		// 0. fake node in the end 
-        	int heightI = (i != heights.length) ? heights[i] : -1;//Dummy node after the end item.
+        	int heightI = (i != heights.length) ? heights[i] : -1; //Dummy node after the end item to dequeue all.
     		
     		// 1. Forming a rectangle, not time to compute the size yet 
-    		if(reacheableFromCurrent.size()==0 || heightI>=reacheableFromCurrent.peek()){
+    		if(reacheableFromCurrent.size()==0 || heightI>=heights[reacheableFromCurrent.peek()]){
     			reacheableFromCurrent.push(i++);							// notice i++
     		}
     		
@@ -128,7 +129,8 @@ public class LargestRectangleInHistogram {
     		//  	*ALL* the bar sizes in [left,current-1], pop() until it's empty
     		else{
     			int left = reacheableFromCurrent.pop();
-    			int width = reacheableFromCurrent.isEmpty()?i:  // "left" was the only one in the stack
+    			int width = reacheableFromCurrent.isEmpty()?i:  // "left" was the only one in the stack, which is the smallest one of the
+    															// entire list
     															// all reachable to the left most
     				i-reacheableFromCurrent.peek()-1;			// [left,current-1] area
     															// reacheableFromCurrent.peek() is *not* part of the bar
@@ -142,18 +144,18 @@ public class LargestRectangleInHistogram {
     
     // copied from internet
     // https://discuss.leetcode.com/topic/26070/simple-35ms-o-n-java-solution-with-stack
-    public int largestRectangleAreaReading(int[] height) {
+    public int largestRectangleAreaReading(int[] heights) {
         Stack<Integer> stack = new Stack<Integer>();
         int i = 0;
         int max = 0;
-        while(i <= height.length){
-        	int heightI = (i != height.length) ? height[i] : -1;//Dummy node after the end item.
+        while(i <= heights.length){
+        	int heightI = (i != heights.length) ? heights[i] : -1;//Dummy node after the end item.
         	
-            if(stack.isEmpty() || height[stack.peek()] <= heightI){
+            if(stack.isEmpty() || heights[stack.peek()] <= heightI){
                 stack.push(i++);
             }else {//Height[i] is lower than height[top] of the stack.
                 int last = stack.pop();
-                max = Math.max(max, height[last] * (stack.isEmpty() ? i : i - stack.peek() - 1));
+                max = Math.max(max, heights[last] * (stack.isEmpty() ? i : i - stack.peek() - 1));
             }
         }
         return max;
@@ -162,15 +164,16 @@ public class LargestRectangleInHistogram {
     
     public static void main(String[] args){
     	
-    	int[] heights = {1,1,1,1,1,100,1,1,1,1,1,2,3,4,5};
+   // 	int[] heights = {1,1,1,1,1,100,1,1,1,1,1,2,3,4,5};
+    	int[] heights = {4,2};
     	//int[] heights = {2,1,5,6,2,3};
     	//int[] heights = {2,1,5,6};
     	
     	LargestRectangleInHistogram nn = new LargestRectangleInHistogram();
     	
     	// 1. n*n
-    	System.out.println(nn.largestRectangleAreaNN(heights));
     	System.out.println(nn.largestRectangleAreaClassicStack(heights));
+    	System.out.println(nn.largestRectangleAreaNN(heights));
     	System.out.println(nn.largestRectangleAreaReading(heights));
     	
     	// 2. O(n) but few passes
