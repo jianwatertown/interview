@@ -162,22 +162,71 @@ public class LargestRectangleInHistogram {
     }
     
     
+    // divide and conqure 
+    public int largestRectangleAreaDivideAndConque(int[] heights){
+    	return helper(heights,0,heights.length-1);
+    }
+    
+    public int helper(int[] heights, int start, int end){
+
+    	// 1.base cases
+    	// out of bound
+    	if(start>end || start<0 || end>=heights.length){return 0;}
+    	// only 1 bar
+    	if(start==end) {return heights[start];}
+
+    	// 2. compute the left and right part
+    	int mid = (start+end)/2;
+    	int leftPart = helper(heights,start,mid);				// make sure  *mid* is not ignored
+    	int rightPart = helper(heights,mid+1,end);				
+
+    	// 3. compute the area with middle
+    	int leftStart = mid;
+    	int rightEnd = mid+1;
+    	int leftHeight = heights[mid];
+    	int rightHeight = heights[mid+1];
+    	int middleArea = 0;
+    	
+    	while(leftStart>=start && rightEnd<=end){
+    		// 1. only left expand
+    		// TODO
+    	
+    	}
+    	
+    	return Math.max(Math.max(leftPart, rightPart),middleArea);
+    }
+    
     public static void main(String[] args){
     	
-   // 	int[] heights = {1,1,1,1,1,100,1,1,1,1,1,2,3,4,5};
-    	int[] heights = {4,2};
-    	//int[] heights = {2,1,5,6,2,3};
-    	//int[] heights = {2,1,5,6};
+    	int[] heights1 = {100,4};
+    	int[] heights2 = {33,1,1,1,21};
+    	int[] heights3 = {2,1,5,6,2,3};
+    	int[] heights0 = {3,5,5,2,5,5,6,6,4,4};
     	
     	LargestRectangleInHistogram nn = new LargestRectangleInHistogram();
     	
-    	// 1. n*n
-    	System.out.println(nn.largestRectangleAreaClassicStack(heights));
-    	System.out.println(nn.largestRectangleAreaNN(heights));
-    	System.out.println(nn.largestRectangleAreaReading(heights));
+    	int[][] heightsList = new int[1][];
+    	heightsList[0] = heights0;
+//    	heightsList[1] = heights1;
+//    	heightsList[2] = heights2;
+//    	heightsList[3] = heights3;
     	
-    	// 2. O(n) but few passes
-    	System.out.println(nn.largestRectangleAreaJumpToLeftSmall(heights));    	
+
+    	for(int[] heights:heightsList){
+    		
+        	// 1. n*n    	
+        	System.out.println("naive"+nn.largestRectangleAreaNN(heights));
+        	
+        	// 2. O(n) but few passes
+        	System.out.println("classic-stack"+nn.largestRectangleAreaClassicStack(heights));
+        	System.out.println("stack-others"+nn.largestRectangleAreaReading(heights));
+        	System.out.println("stack-mine"+nn.largestRectangleAreaJumpToLeftSmall(heights));  
+        	
+        	
+        	// 3. O(nLogN)
+        	System.out.println("divide-and-conque"+nn.largestRectangleAreaDivideAndConque(heights));
+        	System.out.println("---------------------------------------------------");
+    	}
     }
 
 }
