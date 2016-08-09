@@ -18,18 +18,20 @@ public class EditDistance {
     
     public int minDistance(String source, String target, int sIdx, int tIdx, int[][] previous){
 
-    	// 1. reached to the edge
+    	// 1. Edge
     	if(sIdx==source.length() && tIdx==target.length()) {return 0;}
     	if(sIdx==source.length()) {return target.length()-tIdx;}
     	if(tIdx==target.length()) {return source.length()-sIdx;}
     	
-    	// 2. previous set 
+    	// 2. Multi-value cache 
     	if(previous[sIdx][tIdx]>=0){
     		return previous[sIdx][tIdx];
     	}
 
+    	// 3. Init
     	int minDistance=0;
-    	// 2.1 current characters match
+    	
+    	// 4. Recursion
     	if(source.charAt(sIdx)==target.charAt(tIdx)){
     		minDistance = minDistance(source, target, sIdx+1,tIdx+1,previous);
     	}
@@ -42,6 +44,8 @@ public class EditDistance {
     		int minDeletion =  minDistance(source, target, sIdx+1,tIdx,previous)+1;
     		minDistance = Math.min(Math.min(minInsertion,minReplace),minDeletion);
     	}
+    	
+    	// 5. Return
     	previous[sIdx][tIdx] = minDistance;
 		return minDistance;
 	}

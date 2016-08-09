@@ -1,4 +1,4 @@
-package dynamicProgramming;
+package recursion;
 
 import java.util.Arrays;
 
@@ -21,9 +21,8 @@ public class EightQueens {
 		// 1. base case, max level
 		if(row>=8){
 			for(int i=0;i<8;i++){
-				//System.out.println("x="+i+" y="+board[i]);
+				System.out.println("x="+i+" y="+board[i]);
 			}
-			System.out.println("hey");
 		}
 		
 		// 2. now we need to place a queen

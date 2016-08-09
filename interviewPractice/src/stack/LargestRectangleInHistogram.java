@@ -1,8 +1,6 @@
 package stack;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Map;
 import java.util.Stack;
 
 public class LargestRectangleInHistogram {
@@ -197,18 +195,18 @@ public class LargestRectangleInHistogram {
     
     public static void main(String[] args){
     	
-    	int[] heights1 = {100,4};
-    	int[] heights2 = {33,1,1,1,21};
-    	int[] heights3 = {2,1,5,6,2,3};
-    	int[] heights0 = {3,5,5,2,5,5,6,6,4,4};
+    	int[] heights0 = {3,5,5,2,5,5,6,6,4,4};	// 24
+    	int[] heights1 = {100,4};				// 100
+    	int[] heights2 = {33,1,1,1,21};			// 33
+    	int[] heights3 = {2,1,5,6,2,3};			// 10
     	
     	LargestRectangleInHistogram nn = new LargestRectangleInHistogram();
     	
-    	int[][] heightsList = new int[1][];
+    	int[][] heightsList = new int[4][];
     	heightsList[0] = heights0;
-//    	heightsList[1] = heights1;
-//    	heightsList[2] = heights2;
-//    	heightsList[3] = heights3;
+    	heightsList[1] = heights1;
+    	heightsList[2] = heights2;
+    	heightsList[3] = heights3;
     	
 
     	for(int[] heights:heightsList){
@@ -223,7 +221,7 @@ public class LargestRectangleInHistogram {
         	
         	
         	// 3. O(nLogN)
-        	System.out.println("divide-and-conque"+nn.largestRectangleAreaDivideAndConque(heights));
+//        	System.out.println("divide-and-conque"+nn.largestRectangleAreaDivideAndConque(heights));
         	System.out.println("---------------------------------------------------");
     	}
     }

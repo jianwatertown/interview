@@ -46,44 +46,45 @@ public class CoinChange {
         return (mins[n] > n) ?  -1 : mins[n];
     }
     
+/**
+ *     a) (2, {1},[-2,-2])
+ *     		(1,{1},[-2,-2])	2
+ *     			(0,{1},[-2,-2]}
+ * @param n
+ * @param coins
+ * @param mins
+ * @return
+ */
+    
     public int minCoinsRecursive(int n, int[] coins, int mins[]){
     	
-    	// -2 have not checked
-    	// -1 checked, cannot reach
-    	// 1+ checked, with valid number
-    	if(mins[n]!=-2) 
-    	{return mins[n];}
-
-    	if(n==0){
-    		mins[0]=0;
+    	// 0. boundary case
+    	//	cache, -2 not visited, -1 not possible , 0 and more, real value
+    	if(n<0) {
+    		return -1;		
+    	}
+    	else if(n==0){
     		return 0;
     	}
+    	// 1. return cache
+    	if(mins[n]!=-2) {return mins[n];}
     	
-    	// set to unattainable value
-    	mins[n] = n+1;
+    	// 2. init
+    	int minCoin = n+1;
+    	
+    	// 3. recursion
     	for(int coin:coins){
-    		
-    		int remain = n-coin;
-
-    		// 1. base case, one of them match
-    		if(remain==0){
-    			mins[n] = 1;
-    			return 1;
+    		int usedCoin = minCoinsRecursive(n-coin,coins,mins);
+    		if(usedCoin!=-1){
+    			minCoin = Math.min(minCoin,usedCoin+1);
     		}
-    		// 2. find this recursively
-    		else if(remain>0){
-    			int minForUsingThisCoin = minCoinsRecursive(remain,coins,mins);
-    			// if find anything
-    			if(minForUsingThisCoin>=0){
-    				mins[n] = Math.min(mins[n],minForUsingThisCoin+1);
-    			}
-    		}
-    		// 3. if remain<0, then cannot use this coin, skip
     	}
-    	return (mins[n] > n) ?  -1 : mins[n];
+    	
+    	// 4. judge
+    	minCoin = (minCoin==n+1)?-1:minCoin;
+    	mins[n] = minCoin;
+    	return minCoin;
     }
-    
-    
     
     public int coinChange(int[] coins, int amount) {
     	int[] mins = new int[amount+1];
@@ -93,7 +94,7 @@ public class CoinChange {
     
     public static void main (String[] args) {
     	CoinChange change = new CoinChange();
-//        System.out.println(change.minCoinsIterative(12, new int[] {1,2,6,7}));
+    	System.out.println(change.minCoinsIterative(12, new int[] {1,2,6,7}));
         System.out.println(change.coinChange(new int[] {186,419,83,408},6249));
     }
 }

@@ -1,55 +1,68 @@
 package dynamicProgramming;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import sortAndSearch.BinarySearch;
 
+/**
+ * For example,	Given [10, 9, 2, 5, 3, 7, 101, 18],
+	The longest increasing subsequence is [2, 3, 7, 101], therefore the length is 4. 
+	Note that there may be more than one LIS combination, it is only necessary for you to return the length.
+
+	Your algorithm should run in O(n2) complexity.
+	
+	
+	Leetcode answer is busted
+	
+ * @author jian.wang
+ *
+ */
+// called "Longest Increasing Subsequence" on LeetCode
 public class LongestIncreasingString {
 
 	
 	// Power(n,2) solution
-	public int lengthOfLIS2(int[] nums) {
-		List<ArrayList<Integer>> allLIS = new ArrayList<ArrayList<Integer>>();
+	public int lengthOfLISNN(int[] nums) {
+		
+		int max_sequence_length = 0;
 		
 		for(int i=0;i<nums.length;i++){
-			int maxLengthAtI = 0;
-			ArrayList<Integer> current = null;
-			for(ArrayList<Integer> previousList: allLIS){
-				if(previousList.size()>maxLengthAtI && 				// longest one
-					previousList.get(previousList.size()-1)>nums[i]){	// smaller so we can append
-					current = previousList;
-					maxLengthAtI = previousList.size() + 1;
+			
+			// *key*: j stands on the end of the increasing index
+			for(int j=i;j<nums.length;j++){
+				if(j==nums.length-1 || nums[j+1]<nums[j]){
+					max_sequence_length = Math.max(max_sequence_length,j-i+1);
+					break;
 				}
 			}
 		}
-		return allLIS.get(allLIS.size()-1).size();
+		return max_sequence_length;
     }
 	
 /**
  * tails is an array storing the smallest tail of all increasing subsequences with length i+1 in tails[i].
-For example, say we have nums = [4,5,6,3], then all the available increasing subsequences are:
+    For example, say we have nums = [4,5,6,3], then all the available increasing subsequences are:
+    
+    len = 1   :      [4], [5], [6], [3]   => tails[0] = 3
+    len = 2   :      [4, 5], [5, 6]       => tails[1] = 5
+    len = 3   :      [4, 5, 6]            => tails[2] = 6
+    
+    We can easily prove that tails is a increasing array. Therefore it is possible to do a binary search in tails 
+    array to find the one needs update.
+    
+    Each time we only do one of the two:
+    
+    (1) if x is larger than all tails, append it, increase the size by 1
+    (2) if tails[i-1] < x <= tails[i], update tails[i]
+    
+    always
+    1) binary search find an "i" so that either
+    	(a) tails[i-1] < x <= tails[i]
+    	or 
+    	(b) last index (when it's largest than all trails)
+    2) so tails[i] = x, in both (a), (b) cases
+    3) in case (a), max_length++
+    
+    Doing so will maintain the tails invariant. The the final answer is just the size.
 
-len = 1   :      [4], [5], [6], [3]   => tails[0] = 3
-len = 2   :      [4, 5], [5, 6]       => tails[1] = 5
-len = 3   :      [4, 5, 6]            => tails[2] = 6
-We can easily prove that tails is a increasing array. Therefore it is possible to do a binary search in tails 
-array to find the one needs update.
-
-Each time we only do one of the two:
-
-(1) if x is larger than all tails, append it, increase the size by 1
-(2) if tails[i-1] < x <= tails[i], update tails[i]
-
-always
-1) binary search find an "i" so that either
-	(a) tails[i-1] < x <= tails[i]
-	or 
-	(b) last index (when it's largest than all trails)
-2) so tails[i] = x, in both (a), (b) cases
-3) in case (a), max_length++
-
-Doing so will maintain the tails invariant. The the final answer is just the size.
  * @param nums
  * @return
  */
@@ -68,6 +81,9 @@ Doing so will maintain the tails invariant. The the final answer is just the siz
 	        }
 	        tails[i] = x;
 	        if (i == size) ++size;
+	    }
+	    for(int i=0;i<tails.length;i++){
+	    	System.out.println("i="+i+" "+tails[i]);
 	    }
 	    return size;
 	}
@@ -97,5 +113,11 @@ Doing so will maintain the tails invariant. The the final answer is just the siz
 			}
 		}
 		return max_length_index;	// is both the index and the length
+	}
+	
+	public static void main(String [] args){
+		LongestIncreasingString test = new LongestIncreasingString();
+		System.out.println(test.lengthOfLISNN(new int[]{10,9,2,5,3,7,101,18}));
+		System.out.println(test.lengthOfLISFromWeb(new int[]{10,9,2,5,3,7,101,18}));
 	}
 }
