@@ -27,7 +27,7 @@ public class MagicIndex {
 				System.out.println(index);
 			}
 			
-			// search left and right
+			// search left *and* right
 			int leftIndex = Math.min(index-1, input[index]);
 			int rightIndex = Math.max(index+1, input[index]);
 			
