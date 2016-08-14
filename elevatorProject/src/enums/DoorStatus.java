@@ -1,4 +1,4 @@
-package control;
+package enums;
 
 public enum DoorStatus {
 	openned,

@@ -3,7 +3,7 @@ package control;
 import java.util.List;
 
 import core.Elevator;
-import core.ElevatorInstruction;
+import enums.ElevatorInstruction;
 import requests.ElevatorRequest;
 
 

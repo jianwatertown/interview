@@ -1,7 +1,7 @@
 package core;
 
-import control.DoorStatus;
-import control.Floor;
+import enums.DoorStatus;
+import enums.ElevatorDirection;
 
 /***
  * Representing the Elevator "box", provide primitives to change the
@@ -14,10 +14,10 @@ public class Elevator {
 	// internal status of elevator
 	private ElevatorDirection currentDirection;
 	private DoorStatus doorStatus;
-	private Floor currentFloor;
+	private int currentFloor;
 	
 	// retrieve current status, public available
-	public Floor getCurrentFloor(){ return currentFloor;}
+	public int getCurrentFloor(){ return currentFloor;}
 	public ElevatorDirection getCurrentDirection(){return currentDirection;}
 	public DoorStatus getDoorStatus() {return doorStatus;}
 	
