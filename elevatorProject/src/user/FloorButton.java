@@ -1,4 +1,4 @@
-package userinterface;
+package user;
 
 import requests.FloorRequest;
 import requests.Request;

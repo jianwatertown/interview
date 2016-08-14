@@ -1,7 +1,7 @@
 package control;
 
-import requests.ElevatorRequest;
+import requests.Request;
 
 public interface RequestListener {
-	public void addToRequestQueue(ElevatorRequest request);
+	public void handleRequest(Request request);
 }

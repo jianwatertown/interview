@@ -5,6 +5,7 @@ import java.util.List;
 import core.Elevator;
 import enums.ElevatorInstruction;
 import requests.ElevatorRequest;
+import requests.Request;
 
 
 public class ElevatorController implements RequestListener{
@@ -18,7 +19,7 @@ public class ElevatorController implements RequestListener{
 	
 	// Clients add requests to elevator
 	@Override
-	public void addToRequestQueue(ElevatorRequest request){}
+	public void handleRequest(Request request){}
 		
 	public void runElevator(){
 		

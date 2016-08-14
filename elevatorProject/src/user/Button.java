@@ -1,4 +1,4 @@
-package userinterface;
+package user;
 
 public abstract class Button {
 	public abstract String getLabel();

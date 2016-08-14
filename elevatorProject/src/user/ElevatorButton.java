@@ -1,4 +1,4 @@
-package userinterface;
+package user;
 
 import java.util.Set;
 
@@ -21,7 +21,7 @@ public class ElevatorButton extends Button implements RequestDispatcher {
 	public void dispatch(Request request) {			// only dispatch elevator request
 		if(request instanceof ElevatorRequest){
 			for(RequestListener listener: listeners){
-				listener.addToRequestQueue((ElevatorRequest)request);
+				listener.handleRequest((ElevatorRequest)request);
 			}
 		}
 	}

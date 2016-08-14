@@ -1,4 +1,4 @@
-package userinterface;
+package user;
 
 import requests.Request;
 
