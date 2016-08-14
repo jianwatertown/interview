@@ -1,0 +1,66 @@
+How to Diagram
+------------------------------------------------------------------------------------------------
+https://www.gliffy.com/uses/uml-software/
+1. Interface - XXXable
+2. Class
+	- attribute
+	+ methods
+3. "inheritance" - empty arrow. 
+	Dotted: implements
+	Line:extends
+4. "has a" - filled arraw
+
+
+Steps
+------------------------------------------------------------------------------------------------
+1. Who? - users
+Admin
+Rider  (e.g. 300 people use /day)
+Repair
+
+2. What? - objects
+Building
+*Elevator*
+Floors
+Bank
+Controls(Display) System
+
+3. How? - interactions
+Rider - Controls: request elevator, display the status of elevator, beep
+Rider - Elevator: enter,exit,press floor,alarm
+Control - Elevator: floor requst, status return
+
+Core classes
+------------------------------------------------------------
+
+
+
+
+Elevator 
+---------------------
+- elevator_id
+- current_floor
+- min_floor
+- max_floor
+- current_state: idle_and_close,open,close,up,down
+- current_weight
+
++ getCurrentFloor
++ getCurrentState
++ getCurrentWeight
++ *Methods to change its state*:
+	move_up,move_down, bunch of state transitions
++ **
+- floor_to_visit
+
+
+Controller
+---------------------
+
+
+User
+---------------------
+- destination
++ checkCurrentFloor
+
+
