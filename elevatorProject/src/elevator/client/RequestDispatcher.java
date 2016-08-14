@@ -1,6 +1,6 @@
-package user;
+package elevator.client;
 
-import requests.Request;
+import elevator.control.request.Request;
 
 public interface RequestDispatcher {
 

@@ -1,10 +1,10 @@
-package user;
+package elevator.client;
 
 import java.util.Set;
 
-import control.RequestListener;
-import requests.ElevatorRequest;
-import requests.Request;
+import elevator.control.RequestListener;
+import elevator.control.request.ElevatorRequest;
+import elevator.control.request.Request;
 
 /**
  * Make sure this elevator button is deployed inside the elevator

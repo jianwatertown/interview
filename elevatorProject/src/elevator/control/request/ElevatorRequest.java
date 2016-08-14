@@ -1,4 +1,4 @@
-package requests;
+package elevator.control.request;
 
 public class ElevatorRequest extends Request{
 	int destinationFloor;

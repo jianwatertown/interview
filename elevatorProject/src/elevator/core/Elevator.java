@@ -1,7 +1,7 @@
-package core;
+package elevator.core;
 
-import enums.DoorStatus;
-import enums.ElevatorDirection;
+import elevator.enums.DoorStatus;
+import elevator.enums.ElevatorDirection;
 
 /***
  * Representing the Elevator "box", provide primitives to change the

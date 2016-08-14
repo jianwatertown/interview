@@ -1,4 +1,4 @@
-package enums;
+package elevator.enums;
 
 public enum ElevatorInstruction {
 	UP,

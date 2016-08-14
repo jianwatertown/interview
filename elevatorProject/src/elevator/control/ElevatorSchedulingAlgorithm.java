@@ -1,10 +1,10 @@
-package control;
+package elevator.control;
 
 import java.util.List;
 
-import enums.ElevatorDirection;
-import enums.ElevatorInstruction;
-import requests.ElevatorRequest;
+import elevator.control.request.ElevatorRequest;
+import elevator.enums.ElevatorDirection;
+import elevator.enums.ElevatorInstruction;
 
 public interface ElevatorSchedulingAlgorithm {
 	public ElevatorInstruction getNextInstructin(
