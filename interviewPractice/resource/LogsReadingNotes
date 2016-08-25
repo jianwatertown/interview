@@ -1,0 +1,38 @@
+https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying
+
+Notes:
+
+Log-structure theory
+------------------------------------------------------
+1. Log-structured data flow. Master-Slave design is better than active-active desgin
+2. A lot of orgs have problems in the "hierarchy of needs" (https://en.wikipedia.org/wiki/Maslow%27s_hierarchy_of_needs)
+ a reliable system to make data avaiable and data model consistent. like what Data team is doing.
+3. 2 trends that make data integration harder: a) event data b) exposion of specialized data systems
+4. "Each working data pipeline is designed like a log; each broken data pipeline is broken in its own way."
+5. "Log" has its important semantics
+
+
+ETL pipelines
+------------------------------------------------------
+6. ETL has 2 things: a) extraction and data clean up b)restructed for data warehousing queries c) not soloved? what about real-time
+
+7. Why ETL not working: data producers are not very aware of the use of data in data warehouse and end up creating data that is hard to extract or requires heavy, hard to scale transformation. ETL team never manage to scale to match the pace.
+
+8. Organization scalability
+
+
+9. Where the transformation reside
+This architecture also raises a set of different options for where a particular cleanup or transformation can reside:
+a) It can be done by the data producer prior to adding the data to the company wide log.
+b) It can be done as a real-time transformation on the log (which in turn produces a new, transformed log)
+c) It can be done as part of the load process into some destination data system
+
+10. The typical approach to activity data in the web industry is to log it out to text files where it can be scrapped into a data warehouse or into Hadoop for aggregation and querying. The problem with this is the same as the problem with all batch ETL: it couples the data flow to the data warehouse's capabilities and *processing schedule*.
+
+11. Of course, separating publishers from subscribers is nothing new. But if you want to keep a commit log that acts as a multi-subscriber real-time journal of everything happening on a consumer-scale website, scalability will be a primary challenge. 60 billion unique message writes through Kafka per day
+
+12. *data collection drives data processing model*
+The real driver for the processing model is the method of data collection. Data which is collected in batch is naturally processed in batch. When data is collected continuously, it is naturally processed continuously.
+
+
+

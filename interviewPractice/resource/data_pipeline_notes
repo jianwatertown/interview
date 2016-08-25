@@ -1,0 +1,141 @@
+Data Pipeline Examples:
+	1.	LinkedIn: Clicks + Views = Recommendations
+	2.	Ad Network: Clicks + Impression = User Profile
+	3.	Search: Graph of web pages + Page Rank = Search Result
+	4.	AB Testing: A/B conversions numbers ->
+	5.	Data Warehousing: key metrics + user interaction in analytics + filter/aggregation -> Tableau Dashboard
+
+Data Pipeline
+	A unified system for capturing *events* for analysis and build products
+
+------------------------------------------------------------------------
+
+Input:
+	Click Data
+	Web Visits
+	Email Sends
+	User Events
+
+Process
+	Counting
+	Machine Learning
+	ETL
+
+Output
+	Data Warehouse
+	Product Features
+	Ad Hoc Analysis
+
+------------------------------------------------------------------------
+Coarse-Grain events
+	1 event that might represent a lot of things
+Fine-Grained events
+	1) few types of events
+	2) use schema-less formats are popular(JSON, CSV) but they have drawbacks as harder because you need to write parsers/encode-decode
+
+
+
+Schema discussion
+------------------------------------------------------------------------
+https://news.ycombinator.com/item?id=11546098
+JSON: {"start": "2007-03-01"} week typed, not sure what the data type for "2007-03-01" is. It sits on top of this layer
+
+Ion,instead, defines: {"timestamp": "2007-03-01"}, which pre-defined the data type, strongly typed, or "richly typed"
+
+Protocal Buffers - Google
+Trift - Facebook
+Avro - 
+
+
+Schema - continued
+------------------------------------------------------------------------
+
+Twitter:
+------------
+client
+page
+section
+component
+element
+action
+
+Redfin(addition):
+------------
+visitor_id
+login_id
+environment
+event_timestamp
+event_details
+day
+
+Key components
+------------------------------------------------------------------------
+*** Application *** 
+------------------------
+logging-framework
+data seralization
+------------------------
+ 
+
+1. Event Framework a.k.a logging
+	Easy way to generate event, 
+	Maybe 1 line 
+	Anotation ( e.g. add annotation then EventObject)
+	serializable
+
+2. Serialzation Framework
+	Apache Avro
+	Apache Thrift
+	Protocal Buffer(Google)
+   Listener. (e.g. becomes serializable, use "toString()" function)
+
+
+------------------------
+*** Big message bus (Queuing System) *** 
+------------------------
+1. Big message bus (Queuing System)
+-	Horizontally scalable
+-	Redundant
+-	APIs/easy to integrate
+Apache Kafka - read more
+AWS Kinesis
+
+
+------------------------
+*** Data Persistence ***
+------------------------
+2. Redshift
+S3 - use Hive to analyis it
+Hadoop HDFS
+Redshift
+
+------------------------
+4. Workflow Management System
+------------------------
+For coordinnating the taks in the pipeline
+Luigi
+Oozie
+Should be a very general problem why no body can use it?
+probably you should to it yourself
+e.g.  (Firehose Handles now. in Analytics is Redtromonous)
+
+
+------------------------------------------------
+6. Batch processing and ad-hoc analysis
+------------------------------------------------
+Apache Hadoop(MapReduce)
+Apache Hive(or other SQL-on-Hadoop)
+Apache Spark
+e.g. simply out views + tableau report
+
+
+
+
+Side topic: Lambda Architecture ????
+------------------------------------
+Lambda in AWS is a mini-web service
+
+
+
+
+
