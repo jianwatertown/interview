@@ -108,6 +108,9 @@ public class CourseGraphTwo {
     }
     
     public static void main(String[] args){
+    	Character c = 'A';
+    	System.out.println(c.toString());
+    	
     	int[][] edges = new int[][]{
 				  {0,1},
 				  {0,2},
