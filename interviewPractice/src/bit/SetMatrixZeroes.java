@@ -52,6 +52,8 @@ package bit;
  *			except the edges, use the edges to set each cell accordingly
  *	3.	Iteration Three, fix the edges, except the 4 corners
  *	4.	Iteration Four, fix the 4 corners
+ *
+ *  http://stackoverflow.com/questions/3312853/how-does-bitshifting-work-in-java
  */
 public class SetMatrixZeroes {
 
@@ -61,7 +63,7 @@ public class SetMatrixZeroes {
     	
     	// 1. first iteration, set the edges
         for(int i=0;i<x;i++){
-        	for(int j=0;i<y;j++){
+        	for(int j=0;j<y;j++){
         		if(matrix[i][j]==0){
         			setEdgesOne(i,j,matrix);
         		}
@@ -118,8 +120,8 @@ public class SetMatrixZeroes {
     	return (
     			(matrix[0][j]&8)==8||
     			(matrix[x-1][j]&8)==8||
-    			(matrix[0][j]&4)==4||
-    			(matrix[y-1][j]&4)==4
+    			(matrix[i][0]&4)==4||
+    			(matrix[i][y-1]&4)==4
     			);
     }
     
@@ -132,7 +134,16 @@ public class SetMatrixZeroes {
     	matrix[x-1][j] = matrix[x-1][j]|8;
     	
     	// 2. column
-    	matrix[i][0] = matrix[0][j]|4;
-    	matrix[i][y-1] = matrix[y-1][j]|4;
+    	matrix[i][0] = matrix[i][0]|4;
+    	matrix[i][y-1] = matrix[i][y-1]|4;
+    }
+    
+    
+    public int getRowOne(){
+    	return (1>>0);
+    }
+    
+    public int getColumnOne(){
+    	int column = (1>>0);
     }
 }
