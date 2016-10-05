@@ -33,6 +33,25 @@ package bit;
         To get the next state, simply do
         
         board[i][j] >> 1
+        
+        
+         *             Bit-wise operation
+  *
+- *     1. Integer is a 4-byte (32 bit)
+- *     2. range -2 power 31 to 2 power 31 (first bit as sign)
+- *     
+- *             In this case
+- *     1.       matrix[x][y] = v, v == either 
+- *                     00000000 00000000 00000000 0000 0000 - 0
+- *                     00000000 00000000 00000000 0000 0001 - 1
+- *
+- *     Operations
+- *             00000000 00000000 00000000 0000 1000 - row
+- *             00000000 00000000 00000000 0000 0100 - column
+- *             
+- *             29-30 two bits (row,column) determines if the row, column needs to be reset
+- *     
+
  * 
  * @author jian.wang
  *
