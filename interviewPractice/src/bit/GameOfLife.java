@@ -59,12 +59,51 @@ package bit;
 public class GameOfLife {
 	
     public void gameOfLife(int[][] board) {
+        for(int i=0;i<board.length;i++){
+        	for(int j=0;j<board[0].length;j++){
+        		// live now
+        		if((board[i][j]&1)==1){
+        			// 2-3 neigbors, live to next round
+        			if(2<=getNeighborsCount(i,j,board)&&
+        					3>=getNeighborsCount(i,j,board)){
+        				board[i][j] = 3; // 11
+        			}
+        		}
+        		// dead now
+        		if((board[i][j]&1)==0){
+        			if(3==getNeighborsCount(i,j,board)){
+        				board[i][j] = 2; //10
+        			}
+        		}
+
+        	}
+        }
         
+        // move to next board
+        for(int i=0;i<board.length;i++){
+        	for(int j=0;j<board[0].length;j++){
+        		board[i][j] = board[i][j]>>1;
+        	}
+        }
+    }
+     
+    public int getNeighborsCount(int row, int column, int[][]board){
+    	int count=0;
+    	if(isAlive(row-1,column-1,board)) count++;
+    	if(isAlive(row,column-1,board)) count++;
+    	if(isAlive(row+1,column-1,board)) count++;
+    	if(isAlive(row+1,column,board)) count++;
+    	if(isAlive(row+1,column+1,board)) count++;
+    	if(isAlive(row,column+1,board)) count++;
+    	if(isAlive(row-1,column+1,board)) count++;
+    	if(isAlive(row-1,column,board)) count++;
+    	return count;    	
     }
     
-    public static void main(String[] args){
-    	StringBuffer sb = new StringBuffer();
-    	System.out.println(sb.insert(0,"a").insert(0, "b").toString());
+    public boolean isAlive(int row, int column, int[][] board){
+    	if(row<0||row>=board.length||column<0||column>=board[0].length){
+    		return false;
+    	}
+		return (board[row][column]&1)==1;
     }
-
 }
