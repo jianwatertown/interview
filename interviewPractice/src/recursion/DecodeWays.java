@@ -24,8 +24,40 @@ import java.util.Map;
  */
 public class DecodeWays {
 	
+	public int numDecodings(String s) {
+		
+		if(s==null||s.length()==0){ return 0;}
+		
+		// 1. ways[i] # of ways for substring index [i,end] inclusive
+		int [] ways = new int[s.length()+1];	
+		
+		// 2. [end + 1,end] empty string has 1 way to decode
+		ways[s.length()] = 1; 					
+		
+		// 3.length-1
+		if(s.charAt(s.length()-1)!='0') { ways[s.length()-1] = 1;}
+			
+		// 4. build from (length-2) to the front
+		for(int i=s.length()-2;i>=0;i--){
+			int cur = Character.getNumericValue(s.charAt(i));
+			int prev = Character.getNumericValue(s.charAt(i+1));
+			
+			// core part
+			if(cur==0) {ways[i]=0;}
+			else{
+				ways[i] = ways[i+1];	// at least 1 digit + ways[i+1]
+				if (cur*10+prev<=26){
+					ways[i]+=ways[i+2];
+				}
+			}
+		}
+		return ways[0];
+	}
+	
+	
+	
 		// the following works!
-     public int numDecodings(String s) {
+     public int numDecodings3(String s) {
             if( s.compareTo("") == 0) return 0;
             
             int[] ways = new int[s.length()+1];
