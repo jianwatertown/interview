@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * 	Push Model
@@ -40,13 +40,13 @@ import java.util.Set;
  */
 public class Twitter {
 	
-	Map<Integer,TweetsToOneUser> tweetsToAllUsers = 
-			new HashMap<Integer,TweetsToOneUser>();
+	Map<Integer,UserMailBox> allUserMailBoxes = 
+			new HashMap<Integer,UserMailBox>();
 	
-	Map<Integer,HashSet<Integer>> followingMe = 
+	Map<Integer,HashSet<Integer>> followersMap = 
 			new HashMap<Integer,HashSet<Integer>>();
 
-	Map<Integer,HashSet<Integer>> following = 
+	Map<Integer,HashSet<Integer>> followingMap = 
 			new HashMap<Integer,HashSet<Integer>>();
 	
 	int order = 0;
@@ -59,27 +59,13 @@ public class Twitter {
     public Tweet postTweet(int user_id, String tweet_text) {
     	
     	Tweet t = Tweet.create(user_id, tweet_text);
-
-    	// a.  find all followers, including myself
-    	Set<Integer> followers = this.followingMe.get(user_id);
-    	if(followers==null) {
-    		followers= new HashSet<Integer>();
-    		followers.add(user_id);
-    	}
+    	initUserIfNew(user_id);
     	
-    	// b. send messages to each follower
-    	for(Integer follower:followers){
-    		// 1. all tweets to this user
-    		TweetsToOneUser tweetsToUser = tweetsToAllUsers.get(follower);
-    		
-    		// 2. no tweets at all? create one
-    		if(tweetsToUser==null) {
-    			tweetsToUser = new TweetsToOneUser();
-        		tweetsToAllUsers.put(follower, tweetsToUser);
-    		}
-    		
-    		// 3. put this tweet after the name of user_id
-    		tweetsToUser.addTweetNode(new TNode(++order,t),user_id);    		
+    	// send messages to each follower
+    	for(Integer follower:this.followersMap.get(user_id)){
+    		initUserIfNew(follower);
+    		UserMailBox followerMailBox = allUserMailBoxes.get(follower);
+    		followerMailBox.addTweetNode(new TNode(++order,t),user_id);
     	}
     	return t;
     }
@@ -87,19 +73,19 @@ public class Twitter {
     // @param user_id an integer
     // return a list of 10 new feeds recently
     // and sort by timeline
-    public List<Tweet> getTimeline(int user_id) {    	
-    	TweetsToOneUser tweetsToUser = tweetsToAllUsers.get(user_id);
-    	if(tweetsToUser!=null){
-    		return convertNodesToTweets(tweetsToUser.getTenFromUser(user_id));
-    	}
-    	return new LinkedList<Tweet>();
+    public List<Tweet> getTimeline(int user_id) { 
+    	initUserIfNew(user_id);
+    	UserMailBox mailbox = allUserMailBoxes.get(user_id);
+    	return convertNodesToTweets(mailbox.getTenFromSender(user_id));
     }
     
     public List<Tweet> convertNodesToTweets(List<TNode> nodes){
     	List<Tweet> resultTweet = new ArrayList<Tweet>();
-    	for(int i=0;i<nodes.size();i++){
-    		resultTweet.add(nodes.get(i).tweet);
-    	}
+    	if(nodes!=null){
+        	for(int i=0;i<nodes.size();i++){
+        		resultTweet.add(nodes.get(i).tweet);
+        	}
+        }
     	return resultTweet;
     }
         
@@ -109,18 +95,13 @@ public class Twitter {
     public List<Tweet> getNewsFeed(int user_id) {
     	
     	List<TNode> tweets = new LinkedList<TNode>();
-    	TweetsToOneUser tweetsToOneUser = tweetsToAllUsers.get(user_id);
-    	Set<Integer> pplImFollowing = following.get(user_id);
     	
-    	// 1. sad
-    	if(pplImFollowing==null) {pplImFollowing = new HashSet<Integer>();}
+    	initUserIfNew(user_id);
+    	UserMailBox mailBox = allUserMailBoxes.get(user_id);
     	
-    	// 2. add myself and all my following
-    	pplImFollowing.add(user_id);
-    	if(tweetsToOneUser!=null){
-        	for(Integer bigV:pplImFollowing){
-        		tweets.addAll(tweetsToOneUser.getTenFromUser(bigV));
-        	}
+    	for(Integer following:followingMap.get(user_id)){
+    		initUserIfNew(following);
+    		tweets.addAll(mailBox.getAllFromSender(following));
     	}
     	
         // 3. sort 
@@ -136,33 +117,23 @@ public class Twitter {
     // from user_id follows to_user_id
     public void follow(int from_user_id, int to_user_id) {
     	
-    	// 1. add following me
-    	HashSet<Integer> a = followingMe.get(to_user_id);
-    	if(a==null) {a = new HashSet<Integer>();};
-    	a.add(from_user_id);
+    	if(from_user_id==to_user_id) return;
+    	initUserIfNew(from_user_id);
+    	initUserIfNew(to_user_id);
     	
-    	// 2. add following
-    	HashSet<Integer> b = following.get(from_user_id);
-    	if(b==null) {b = new HashSet<Integer>();};
-    	b.add(to_user_id);
+    	// 1. from_user_id -> to_user_id
+    	followingMap.get(from_user_id).add(to_user_id);
     	
-    	// 3. add Big V's previous messages 
-    	TweetsToOneUser tweetsToBig = tweetsToAllUsers.get(to_user_id);
+    	// 2. to_user_id -> from_user_id
+    	followersMap.get(to_user_id).add(from_user_id);
+    	
+    	// 3. add all messages from to_user_id
+    	UserMailBox toMailBox = allUserMailBoxes.get(to_user_id);
+    	UserMailBox fromMailBox = allUserMailBoxes.get(from_user_id);
 
-    	// when BigV has messages to herself
-    	if(tweetsToBig!=null && tweetsToBig.getAllFromUser(to_user_id)!=null){
-    		
-    		// create queue
-    		TweetsToOneUser tweetsToFrom = tweetsToAllUsers.get(from_user_id);
-        	if(tweetsToFrom==null){
-        		tweetsToFrom = new TweetsToOneUser();
-        		tweetsToAllUsers.put(from_user_id, tweetsToFrom);
-        	}
-        	
-        	// add every single message
-        	for(TNode tN:tweetsToBig.getAllFromUser(to_user_id)){
-        		tweetsToFrom.addTweetNode(tN, to_user_id);
-        	}	
+    	// 	add every single message
+    	for(TNode tN:toMailBox.getAllFromSender(to_user_id)){
+    		fromMailBox.addTweetNode(tN, to_user_id);
     	}
     }
 
@@ -171,20 +142,12 @@ public class Twitter {
     // from user_id unfollows to_user_id
     public void unfollow(int from_user_id, int to_user_id) {
     	
-    	// 1. add following me
-    	HashSet<Integer> a = followingMe.get(to_user_id);
-    	if(a!=null) {a.remove(from_user_id);};
+    	if(from_user_id==to_user_id) return;
+    	initUserIfNew(from_user_id);
+    	initUserIfNew(to_user_id);
     	
-    	
-    	// 2. add following
-    	HashSet<Integer> b = following.get(from_user_id);
-    	if(b!=null) {b.remove(to_user_id);};
-    	
-    	// 3. clear sent messages
-    	TweetsToOneUser tweetsToOneUser = tweetsToAllUsers.get(from_user_id);
-    	if(tweetsToOneUser!=null){
-    		tweetsToOneUser.clearFollowingQueue(from_user_id);
-    	}
+    	followersMap.get(to_user_id).remove(from_user_id);
+    	followingMap.get(from_user_id).remove(to_user_id);
     }
 
 	// wrapper of [timestamp(order),tweet]
@@ -210,44 +173,83 @@ public class Twitter {
 		}
 	}
 	
-	public class TweetsToOneUser{
-		Map<Integer,LinkedList<TNode>> nodesPerUser = 
-				new HashMap<Integer,LinkedList<TNode>>();
+	public void initUserIfNew(int user_id){
+		// no mailbox
+		if(!allUserMailBoxes.containsKey(user_id)){
+			allUserMailBoxes.put(user_id, new UserMailBox());
+		}
+		// no follower
+		if(!followersMap.containsKey(user_id)){
+			HashSet<Integer> followers = new HashSet<Integer>();
+			followers.add(user_id);
+			followersMap.put(user_id, followers);
+		}
+		// no following
+		if(!followingMap.containsKey(user_id)){
+			HashSet<Integer> following = new HashSet<Integer>();
+			following.add(user_id);
+			followingMap.put(user_id, following);
+		}
+	}
+	
+	public class UserMailBox{
 		
-		public void addTweetNode(TNode n, int bigV){
-			LinkedList<TNode> nodesFromBigV = nodesPerUser.get(bigV);
-			if(nodesFromBigV==null){
-				nodesFromBigV = new LinkedList<TNode>();
-				nodesPerUser.put(bigV, nodesFromBigV);
+		Map<Integer,TreeSet<TNode>> mailPerUser = 
+				new HashMap<Integer,TreeSet<TNode>>();
+		
+		public void addTweetNode(TNode n, int sender){
+			TreeSet<TNode> mailFromSender = mailPerUser.get(sender);
+			if(mailFromSender==null){
+				mailFromSender = new TreeSet<TNode>(new SortByOrder());
+				mailPerUser.put(sender, mailFromSender);
 			}
-			nodesFromBigV.add(0,n);
+			mailFromSender.add(n);
 		}
 		
-		public void clearFollowingQueue(int bigV){
-			if(nodesPerUser.get(bigV)!=null){
-				nodesPerUser.remove(bigV);
+		public List<TNode> getTenFromSender(int sender){
+			List<TNode> mailFromSender = new LinkedList<TNode>();
+			if(mailPerUser.get(sender)!=null){
+    			for(TNode n:mailPerUser.get(sender)){
+    				mailFromSender.add(n);
+    			}
 			}
+    		return mailFromSender.subList(0, 
+    				mailFromSender.size()>=10?10:mailFromSender.size());
 		}
 		
-		public List<TNode> getTenFromUser(int bigV){
-			List<TNode> nodesFromBigV = getAllFromUser(bigV);
-    		return nodesFromBigV.subList(0, nodesFromBigV.size()>=10?10:nodesFromBigV.size());
-		}
-		
-		public List<TNode> getAllFromUser(int bigV){
-			LinkedList<TNode> nodesFromBigV = nodesPerUser.get(bigV);
-			return nodesFromBigV==null?new LinkedList<TNode>():nodesFromBigV;
+		public TreeSet<TNode> getAllFromSender(int sender){
+			TreeSet<TNode> mailFromSender = mailPerUser.get(sender);
+			return mailFromSender==null?new TreeSet<TNode>(new SortByOrder()):mailFromSender;
 		}
 	}
 	
 	public static void main(String[] args){
 		
 		Twitter sys = new Twitter();
-		sys.postTweet(1, "msg");
+		sys.postTweet(1, "LintCode is Good!!!");
 		sys.getNewsFeed(1);
 		sys.getTimeline(1);
 		sys.follow(2, 1);
+		sys.follow(2, 3);
+		sys.postTweet(3, "LintCode is Cool!!!");
+		sys.postTweet(3, "How to do A + B problem?");
+		sys.postTweet(3, "I have accepted A + B problem.");
+		sys.postTweet(3, "I favorite A + B problem.");
+		sys.postTweet(1, "I favorite A + B problem too.");
+		sys.postTweet(2, "Nani?");
+		sys.postTweet(2, "I want to solve this problem now.");
+		sys.postTweet(3, "I want to solve this problem now.");
+		sys.postTweet(3, "The problem is so easy.");
+		sys.postTweet(1, "hehe.");
+		sys.postTweet(2, "Let's to do it together.");
+		sys.postTweet(2, "haha");
 		sys.getNewsFeed(2);
+		sys.getTimeline(2);
+		sys.getNewsFeed(1);
+		sys.follow(1, 2);
+		sys.getNewsFeed(1);
+		sys.follow(1, 3);
+		sys.getNewsFeed(1);
 		sys.unfollow(2, 1);
 		sys.getNewsFeed(2);
 	}
