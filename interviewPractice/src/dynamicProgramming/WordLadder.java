@@ -6,7 +6,7 @@ public class WordLadder {
     public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
     	Map<String,Integer> visited = new HashMap<>();
     	Set<String> visiting = new HashSet<>();
-        return find(beginWord,endWord, wordList,visited,visiting);
+        return find(beginWord,endWord, wordList,visited,visiting)+1;
     }
     
     
@@ -54,30 +54,28 @@ public class WordLadder {
     public Set<String> findFriends(String myself, Set<String> wordList){
     	
     	Set<String> result = new HashSet<String>();
-        
-        // for every character in myself
-        for(int i=0;i<myself.length();i++){
-        	
-        	// change it to the 26 character
-            for(int j=0;j<26;j++){
-
-            	StringBuffer b =  new StringBuffer(myself);
-            	char c = (char)('a'+j);
-            	b.setCharAt(i,c);
-                
-                // if new node and valid
-                if(!myself.equals(b.toString()) 				// not itself
-                		&& wordList.contains(b.toString())){	// valid
-                    result.add(b.toString());
-                }
-            }
-        }
+    	for(String other: wordList){
+    		if(isFriend(myself,other)){
+    		result.add(other);}
+    	}
         return result;
+    }
+    
+    
+    public boolean isFriend(String a, String b){
+    	if(a==null||b==null||a.length()!=b.length()||a.equals(b)) {return false;}
+    	int diffCount = 0;
+    	for(int i=0;i<a.length();i++){
+    		if(a.charAt(i)!=b.charAt(i)){
+    			diffCount++;}
+    		if(diffCount>1) return false;
+    	}
+    	return true;
     }
     
     public static void main(String[] args){
     	WordLadder w = new WordLadder();
-//    	System.out.println(w.ladderLength("hit","hot",  new HashSet<String>(Arrays.asList("hit", "hot","dot","dog","cog"))));
-       	System.out.println(w.ladderLength("hit","hot",  new HashSet<String>(Arrays.asList("hit", "hot"))));
+    	System.out.println(w.ladderLength("hit","cog", 
+    			new HashSet<String>(Arrays.asList("hit", "hot","dot","dog","cog","cit","cot"))));
     }
 }
