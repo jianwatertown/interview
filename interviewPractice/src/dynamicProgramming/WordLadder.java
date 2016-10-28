@@ -1,81 +1,81 @@
 package dynamicProgramming;
 import java.util.*;
 
+
+
+/***
+ * 
+ * 	If using DFS to compute the shortest path, the order of visiting nodes should first be topologically sorted. 
+ * 	If it is not, there may be loops in the DFS forest (recursive tree). 
+ *  For BFS, the visiting order is naturally topologically sorted.
+ *  
+ *   topologically sorted -> how far it is from the root
+ * 	
+ * 	BFS + Active pruning
+ * 
+ * 
+ * @author jian.wang
+ *
+ */
 public class WordLadder {
 	
     public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
-    	Map<String,Integer> visited = new HashMap<>();
-    	Set<String> visiting = new HashSet<>();
-        return find(beginWord,endWord, wordList,visited,visiting)+1;
-    }
-    
-    
-    public int find(String beginWord, String endWord, Set<String> wordList, Map<String,Integer> visited, Set<String> visiting) {
 
-    	if(beginWord.equals(endWord)){
-    		return 0;
-    	}
-
-    	int length = Integer.MAX_VALUE;
-
-    	// 1. find all friends
-    	Set<String> friends = findFriends(beginWord,wordList);
-    	visiting.add(beginWord);
-
-    	for(String frd:friends){
-    		if(visiting.contains(frd)){
-    			continue;
-    		}
-    		// 2. visited
-    		if(visited.containsKey(frd)){
-    			if(visited.get(frd)!=-1)
-    				length = Math.min(length,visited.get(frd)+1);
-    		}
-    		// 3. unvisited friend
-    		else{
-
-    			int distance = find(frd, endWord, wordList, visited, visiting);
-    			if(distance!=-1){
-    				length = Math.min(distance+1,length);
-    			}
-    		}
-    	}
-    	// not found
-    	if(length==Integer.MAX_VALUE){
-    		length = -1;
-    	}
+    	if(beginWord.equals(endWord)){ return 0;}
     	
-    	visiting.remove(beginWord);
-    	visited.put(beginWord,length);
-    	return length;
+    	// BFS with 2 queues
+    	Queue<String> currentLevel = new LinkedList<>();
+    	int currentLevelCount = 1;
+    	currentLevel.add(beginWord);
+    	wordList.remove(beginWord);
+    	int level = 1;
+    	
+    	while(!currentLevel.isEmpty()){
+    		
+			// 2. for node every level
+			String current = currentLevel.poll();
+			currentLevelCount--;
+			
+			// 2.1 found it, return
+			if(current.equals(endWord)) {
+				return level;
+			}
+			
+			// 2.2 nope, add friends to next level
+			currentLevel.addAll(getNextLevelUnvisited(current,wordList));
+			
+    		if(currentLevelCount==0){
+        		currentLevelCount = currentLevel.size();
+        		level++;
+    		}
+    	}
+    	return 0;
     }
 
-    // Exclude from this set
-    public Set<String> findFriends(String myself, Set<String> wordList){
+    // get all friends with distance one
+    public Set<String> getNextLevelUnvisited(String myself, Set<String> wordList){
     	
     	Set<String> result = new HashSet<String>();
-    	for(String other: wordList){
-    		if(isFriend(myself,other)){
-    		result.add(other);}
+    	char[] myChars = myself.toCharArray();
+    	for(int i=0;i<myChars.length;i++){
+    		// replace each character
+    		for(char newChar='a'; newChar<='z';newChar++){
+    			myChars[i] = newChar;
+    			String newWord=String.valueOf(myChars);
+    			if(wordList.contains(newWord)){
+    				result.add(newWord);
+    				wordList.remove(newWord);
+    			}
+    		}
+    		// reset character
+    		myChars = myself.toCharArray();
     	}
-        return result;
-    }
-    
-    
-    public boolean isFriend(String a, String b){
-    	if(a==null||b==null||a.length()!=b.length()||a.equals(b)) {return false;}
-    	int diffCount = 0;
-    	for(int i=0;i<a.length();i++){
-    		if(a.charAt(i)!=b.charAt(i)){
-    			diffCount++;}
-    		if(diffCount>1) return false;
-    	}
-    	return true;
+    	return result;
     }
     
     public static void main(String[] args){
     	WordLadder w = new WordLadder();
-    	System.out.println(w.ladderLength("hit","cog", 
-    			new HashSet<String>(Arrays.asList("hit", "hot","dot","dog","cog","cit","cot"))));
+    	System.out.println(w.ladderLength("hot","dog", 
+    			new HashSet<String>(Arrays.asList("hot", "dog","dot"))));
     }
 }
