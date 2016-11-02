@@ -1,6 +1,7 @@
 package design;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -39,7 +40,7 @@ public class InvertedIndex {
     	// every doc
     	for(Document d: docs){
     		
-    		String[] words = d.content.split(" ");
+    		String[] words = d.content.split(" +");
     		
     		// every word
     		for(String word:words){
@@ -52,7 +53,9 @@ public class InvertedIndex {
     	// return set to a list
     	Map<String,List<Integer>> result = new HashMap<>();
     	for(String key: wordToIndex.keySet()){
-    		result.put(key, new ArrayList(wordToIndex.get(key)));
+    		List resultList = new ArrayList(wordToIndex.get(key));
+    		Collections.sort(resultList);
+    		result.put(key, resultList);
     	}
     	return result;
     }
