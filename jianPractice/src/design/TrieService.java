@@ -3,6 +3,13 @@ package design;
 import java.util.Collections;
 import java.util.List;
 
+
+/**
+ * Check Trie.java, that is written better
+ * 
+ * @author jian.wang
+ *
+ */
 public class TrieService {
     private TrieNode root = null;
 
