@@ -1,4 +1,4 @@
-package design;
+package design.crawler;
 
 public class Document {
 	public int id;

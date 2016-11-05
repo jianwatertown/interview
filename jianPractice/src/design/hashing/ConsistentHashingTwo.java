@@ -1,4 +1,4 @@
-package design;
+package design.hashing;
 
 import java.util.ArrayList;
 import java.util.List;

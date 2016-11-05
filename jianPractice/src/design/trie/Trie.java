@@ -1,4 +1,8 @@
-package design;
+package design.trie;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NavigableMap;
 
 
 /**
@@ -77,15 +81,59 @@ public class Trie {
     		return false;
     	}
     }
+
+    // find the node iteratively
+    public List<String> suggest(String prefix){
+    	
+    	TrieNode r = root;
+    	List result = new ArrayList<String>();
+    	
+    	// 1. find the node first
+    	for(int i=0;i<prefix.length();i++){
+    		Character c = prefix.charAt(i);
+    		if(r.children.containsKey(c)){
+    			r = r.children.get(c);
+    		}
+    		else{
+    			return result;
+    		}
+    	}
+    	// 2. now assemble the result
+    	for(String oneSuffix:findSuggestionFromNode(r)){
+    		result.add(prefix+oneSuffix);
+    	}
+    	return result;    	
+    }
+    
+    public List<String> findSuggestionFromNode(TrieNode r){
+
+    	List<String> result = new ArrayList();
+    	// 1. base case nothing at this level
+    	result.add("");
+    	
+    	// 2. some character points to here
+		for(Character c: r.children.keySet()){
+			List<String> childrenStringList = findSuggestionFromNode(r.children.get(c));
+			for(String childStr:childrenStringList){
+    			result.add(c+childStr);
+			}
+    	}
+   		return result;
+    }
+    
     
     public static void main(String[] args){
     	Trie t = new Trie();
-//    	t.insert("redfin");
+    	t.insert("redfin");
+    	t.insert("red");
+    	t.insert("ron");
+    	t.insert("ronaldo");
 //    	System.out.println(t.search("red"));
 //    	System.out.println(t.startsWith("red"));
-    	t.insert("a");
-    	t.insert("b");
-    	t.insert("c");
-    	System.out.println(t.search("b"));
+//    	t.insert("a");
+//    	t.insert("b");
+//    	t.insert("c");
+    	System.out.println(t.suggest("r"));
+    	System.out.println(t.suggest("d"));
     }
 }

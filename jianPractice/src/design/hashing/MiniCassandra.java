@@ -1,4 +1,4 @@
-package design;
+package design.hashing;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import design.cache.Column;
 
 
 /**

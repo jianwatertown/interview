@@ -1,4 +1,4 @@
-package design;
+package design.twitter;
 
 public class Tweet {
     public int id;

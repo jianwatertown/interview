@@ -1,4 +1,4 @@
-package design;
+package design.cache;
 
 public class Column {
 	

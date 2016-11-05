@@ -1,4 +1,4 @@
-package design;
+package design.trie;
 
 import java.util.Collections;
 import java.util.List;
