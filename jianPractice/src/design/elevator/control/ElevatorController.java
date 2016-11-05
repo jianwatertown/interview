@@ -1,11 +1,11 @@
-package elevator.control;
+package design.elevator.control;
 
 import java.util.List;
 
-import elevator.control.request.ElevatorRequest;
-import elevator.control.request.Request;
-import elevator.core.Elevator;
-import elevator.enums.ElevatorInstruction;
+import design.elevator.control.request.ElevatorRequest;
+import design.elevator.control.request.Request;
+import design.elevator.core.Elevator;
+import design.elevator.enums.ElevatorInstruction;
 
 
 public class ElevatorController implements RequestListener{

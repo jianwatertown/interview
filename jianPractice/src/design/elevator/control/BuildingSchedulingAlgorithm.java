@@ -1,4 +1,4 @@
-package elevator.control;
+package design.elevator.control;
 
 public class BuildingSchedulingAlgorithm {
 

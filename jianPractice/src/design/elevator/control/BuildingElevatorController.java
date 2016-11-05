@@ -1,8 +1,8 @@
-package elevator.control;
+package design.elevator.control;
 
 import java.util.Set;
 
-import elevator.control.request.Request;
+import design.elevator.control.request.Request;
 
 /**
  * If we need global optimization, then we want to send all events to here then 

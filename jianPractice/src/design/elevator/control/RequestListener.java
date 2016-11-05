@@ -1,6 +1,6 @@
-package elevator.control;
+package design.elevator.control;
 
-import elevator.control.request.Request;
+import design.elevator.control.request.Request;
 
 public interface RequestListener {
 	public void handleRequest(Request request);

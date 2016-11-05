@@ -1,4 +1,4 @@
-package elevator.control.request;
+package design.elevator.control.request;
 
 public abstract class Request {
 	protected int priority;

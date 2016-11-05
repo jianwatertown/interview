@@ -1,4 +1,4 @@
-package elevator.client;
+package design.elevator.client;
 
 public abstract class Button {
 	public abstract String getLabel();

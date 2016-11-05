@@ -1,7 +1,7 @@
-package elevator.client;
+package design.elevator.client;
 
-import elevator.control.request.FloorRequest;
-import elevator.control.request.Request;
+import design.elevator.control.request.FloorRequest;
+import design.elevator.control.request.Request;
 
 public class FloorButton extends Button implements RequestDispatcher{
 
