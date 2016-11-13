@@ -50,35 +50,16 @@ public class WebCrawler {
     		// 2. visit it
     		String cUrl = url2Visit.poll();
     		urlSeen.add(cUrl);
-    		System.out.println("processing "+cUrl);
-    		
+
     		// 3. visit its children
-    		String content = getContentFromUrl(cUrl);
-    		List<String> nextBatch = HtmlHelper.parseUrls(content);
+    		List<String> nextBatch = HtmlHelper.parseUrls(cUrl);
     		for(String urlChild:nextBatch){
-    			if(!urlSeen.contains(urlChild) && urlChild.contains("wikipedia.com")){
+    			if(!urlSeen.contains(urlChild)){
     				url2Visit.add(urlChild);
     			}
     		}
     	}
     	return new ArrayList(urlSeen);
-    }
-    
-	// https://docs.oracle.com/javase/tutorial/networking/urls/readingURL.html
-    public String getContentFromUrl(String urlStr){
-    	StringBuffer sb = new StringBuffer();
-    	try{
-            URL url = new URL(urlStr);
-            BufferedReader in = new BufferedReader(
-            new InputStreamReader(url.openStream()));
-    
-            String inputLine;
-            
-            while ((inputLine = in.readLine()) != null)
-                sb.append(inputLine);
-            in.close();
-    	}catch(Exception dontCare){System.out.println(dontCare);}
-        return sb.toString();
     }
     
     public static void main(String[] args){
