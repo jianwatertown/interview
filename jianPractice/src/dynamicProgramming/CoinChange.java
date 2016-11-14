@@ -1,20 +1,43 @@
 package dynamicProgramming;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * Key to iterative approach
- * 	1. use min[i] to hold minimum number of coins needed to make i dollars
- *  2. use min[i] = n+1 for unattainable values, better than Integer.max
- *  3. check index out of bound: 
- *  		a)	int nextTarget = coin+target;
-        		e.g. 2147483647 + 1 -> -2147483648, so we need to check if nextTarget>0
-        		if(nextTarget>0&&nextTarget<=n)
-        	b) single coin might be bigger than n
-        	
-        	
-   TODO: recursive approach still has bug
+	Check input: [1,2147483647]
+	Line 20: java.lang.ArrayIndexOutOfBoundsException: -2147483648
+	
  */
 public class CoinChange {
+	
+	// needs to  rename to "coinChange" to run
+    public int coinChangeBottomUp (int[] coins, int n) {
+    	if(n<=0) return 0;
+    	
+    	// 1.init
+    	int[] coinsNeeded = new int[n+1];
+    	Arrays.fill(coinsNeeded, -1);
+    	coinsNeeded[0] = 0;
+    	
+    	// 2. for all reachable ones
+    	for(int i=0;i<n;i++){
+    		// cannot reach here
+    		if(coinsNeeded[i]==-1){
+    			continue;
+    		}
+    		else{
+    			// 3. move to the next coin place
+    			for(int coin:coins){
+    				coinsNeeded[i+coin] = coinsNeeded[i+coin]==-1?	// not set before?
+    						(coinsNeeded[i]+1):						// new value
+    							Math.min(coinsNeeded[i]+1, coinsNeeded[i+coin]);	// new value v.s. previously set
+    			}
+    		}
+    	}
+    	return coinsNeeded[n];
+    }
+
 	
     public int minCoinsIterative (int n, int[] coins) {
     	
@@ -45,57 +68,40 @@ public class CoinChange {
 
         return (mins[n] > n) ?  -1 : mins[n];
     }
+
     
-/**
- *     a) (2, {1},[-2,-2])
- *     		(1,{1},[-2,-2])	2
- *     			(0,{1},[-2,-2]}
- * @param n
- * @param coins
- * @param mins
- * @return
- */
+    // recursive, top-down
+    public int coinChange (int[] coins, int n) {
+    	Map<Integer,Integer> cache = new HashMap<Integer,Integer>();
+    	cache.put(0, 0);
+    	return coinChange(n,coins,cache);
+    }
     
-    public int minCoinsRecursive(int n, int[] coins, int mins[]){
+    public int coinChange (int n, int[] coins, Map<Integer,Integer> cache) {
     	
-    	// 0. boundary case
-    	//	cache, -2 not visited, -1 not possible , 0 and more, real value
-    	if(n<0) {
-    		return -1;		
-    	}
-    	else if(n==0){
-    		return 0;
-    	}
-    	// 1. return cache
-    	if(mins[n]!=-2) {return mins[n];}
-    	
-    	// 2. init
-    	int minCoin = n+1;
-    	
-    	// 3. recursion
+    	// 1. memory, boundary
+    	if(n<0){ return -1;} // unreachable
+    	if(cache.containsKey(n)) {return cache.get(n);}
+    	    	int minCoin=Integer.MAX_VALUE;
+
+    	// 2. recursion
     	for(int coin:coins){
-    		int usedCoin = minCoinsRecursive(n-coin,coins,mins);
-    		if(usedCoin!=-1){
-    			minCoin = Math.min(minCoin,usedCoin+1);
+    		int subCoin = coinChange(n-coin,coins,cache);
+    		if(subCoin>=0){
+    			minCoin = Math.min(subCoin+1, minCoin);
     		}
     	}
     	
-    	// 4. judge
-    	minCoin = (minCoin==n+1)?-1:minCoin;
-    	mins[n] = minCoin;
+    	// 3. return
+    	minCoin= minCoin==Integer.MAX_VALUE? -1:minCoin;
+    	cache.put(n,minCoin);
     	return minCoin;
     }
-    
-    public int coinChange(int[] coins, int amount) {
-    	int[] mins = new int[amount+1];
-    	Arrays.fill(mins, -2);
-    	return minCoinsRecursive(amount,coins,mins);
-    }
+
     
     public static void main (String[] args) {
     	CoinChange change = new CoinChange();
-    	System.out.println(change.minCoinsIterative(12, new int[] {1,2,6,7}));
-        System.out.println(change.coinChange(new int[] {186,419,83,408},6249));
+    	System.out.println(change.coinChangeBottomUp( new int[] {1},1));
     }
 }
 
