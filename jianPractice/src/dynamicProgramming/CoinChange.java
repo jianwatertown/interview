@@ -12,7 +12,7 @@ import java.util.Map;
 public class CoinChange {
 	
 	// needs to  rename to "coinChange" to run
-    public int coinChangeBottomUp (int[] coins, int n) {
+    public int coinChangeBottomUpIterative (int[] coins, int n) {
     	if(n<=0) return 0;
     	
     	// 1.init
@@ -37,7 +37,6 @@ public class CoinChange {
     	}
     	return coinsNeeded[n];
     }
-
 	
     public int minCoinsIterative (int n, int[] coins) {
     	
@@ -101,7 +100,7 @@ public class CoinChange {
     
     public static void main (String[] args) {
     	CoinChange change = new CoinChange();
-    	System.out.println(change.coinChangeBottomUp( new int[] {1},1));
+    	System.out.println(change.coinChangeBottomUpIterative( new int[] {1},1));
     }
 }
 

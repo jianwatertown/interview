@@ -1,5 +1,7 @@
 package dynamicProgramming;
 
+import java.util.Arrays;
+
 
 /**
  * Given a non-empty array containing only positive integers, find if the array can be partitioned into two subsets such that the sum of elements in both subsets is equal.
@@ -19,13 +21,21 @@ package dynamicProgramming;
     
     Explanation: The array cannot be partitioned into equal sum subsets.
     
+    Not sure if we can re-write this in recursions
     
+    
+    canPartitionTopDown -> from right to left, made sure each number is used exact once
+    						changes in elements on the right will not affect elements on the left
+    
+    canPartitionBottomUp -> left to right, more intuitive, but need to copy of the array to swap with
     
  * @author jian.wang
  *
  */
 public class PartitionEqualSubsetSum {
-    public boolean canPartition(int[] nums) {
+	
+	// top down
+    public boolean canPartitionTopDown(int[] nums) {
         // check edge case
         if (nums == null || nums.length == 0) {
             return true;
@@ -44,10 +54,48 @@ public class PartitionEqualSubsetSum {
         // dp init
         dp[0] = true;
         // dp transition
-        for (int i = 1; i <= nums.length; i++) {
-            for (int j = volumn; j >= nums[i-1]; j--) {
-                dp[j] = dp[j] || dp[j - nums[i-1]];
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = volumn; j >= nums[i]; j--) {
+                dp[j] = dp[j] || dp[j - nums[i]];
             }
+        }
+        return dp[volumn];
+    }
+    
+    /**
+     * Bottom Up will only work with this line
+     * 	boolean[] dq2 = Arrays.copyOf(dp, dp.length);
+     * 	because each number cannot be used multiple times so we need a dq2 to remember old values
+     * 
+     * 
+     * @param nums
+     * @return
+     */
+    
+    public boolean canPartitionBottomUp(int[] nums) {
+        // check edge case
+        if (nums == null || nums.length == 0) {
+            return true;
+        }
+        // preprocess
+        int volumn = 0;
+        for (int num : nums) {
+            volumn += num;
+        }
+        if (volumn % 2 != 0) {
+            return false;
+        }
+        volumn /= 2;
+        // dp def
+        boolean[] dp = new boolean[volumn + 1];
+        // dp init
+        dp[0] = true;
+        // dp transition
+        for (int i = 0; i < nums.length; i++) {
+        	boolean[] dq2 = Arrays.copyOf(dp, dp.length);
+        	for(int sum=0;sum<=volumn-nums[i];sum++){
+        		dp[sum+nums[i]] = dq2[sum+nums[i]] || dq2[sum];	//	maybe use num[i] 
+        	}
         }
         return dp[volumn];
     }
