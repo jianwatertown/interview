@@ -11,20 +11,44 @@ package dynamicProgramming;
  *
  */
 public class MaximumProductSubarray {
-	
-        public int maxProduct(int[] nums) {
-            if (nums == null || nums.length == 0) {
-                return 0;
-            }
-            int max = nums[0], min = nums[0], result = nums[0];
-            for (int i = 1; i < nums.length; i++) {
-                int temp = max;
-                max = Math.max(Math.max(max * nums[i], min * nums[i]), nums[i]);
-                min = Math.min(Math.min(temp * nums[i], min * nums[i]), nums[i]);
-                if (max > result) {
-                    result = max;
-                }
-            }
-            return result;
+
+    // copied from internet
+    public int maxProduct2(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
         }
+        int max = nums[0], min = nums[0], result = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            int temp = max;
+            max = Math.max(Math.max(max * nums[i], min * nums[i]), nums[i]);
+            min = Math.min(Math.min(temp * nums[i], min * nums[i]), nums[i]);
+            if (max > result) {
+                result = max;
+            }
+        }
+        return result;
+    }
+
+    // knowing i, how ot get j
+    public int maxProduct(int[] nums) {
+
+        if(nums ==null || nums.length==0 ) return 0;
+        int i_yes_max= nums[0], i_no_max =  nums[0], i_yes_min = nums[0], i_no_min = nums[0];
+
+        for (int i=1;i<nums.length;i++){
+            // transition
+            int j_yes_max = Math.max(Math.max(i_yes_max*nums[i],nums[i]*i_yes_min),nums[i]);
+            int j_no_max = Math.max(i_yes_max,i_no_max);
+            int j_yes_min = Math.min(Math.min(i_yes_max*nums[i],nums[i]*i_yes_min),nums[i]);
+            int j_no_min = Math.min(i_yes_min,i_no_min);
+
+            // move on
+            i_yes_max = j_yes_max;
+            i_no_max = j_no_max;
+            i_yes_min = j_yes_min;
+            i_no_min = j_no_min;
+        }
+
+        return Math.max(i_no_max,i_yes_max);
+    }
 }
