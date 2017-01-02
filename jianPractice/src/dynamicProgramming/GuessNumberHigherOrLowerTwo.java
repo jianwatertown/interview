@@ -52,18 +52,23 @@ public class GuessNumberHigherOrLowerTwo {
         int[][] dp = new int[n+1][n+1];
 
         // 3. get i, j from previous
-        for(int i=1;i<=n;i++){
-            for(int j=i;j<=n;j++){
-//                if(i==j) {
-//                    dp[i][j] = 0;
-//                }
-//                else{
-                    dp[i][j] = Integer.MAX_VALUE;
-                    for(int k = i;k<=j;k++){
-                        dp[i][j] = Math.min(
-                                k + Math.max(/*i to k-1 */(k-1>=i?dp[i][k-1]:0),/*k+1 to j*/(k+1<=j?dp[k+1][j]:0)),
-                                dp[i][j]);
-//                    }
+        // it's critical to use j as the outer loop: from j first, so that i<=j
+        for(int j=2;j<=n;j++){
+
+            // 4. important edge case
+            dp[j][j] = 0;
+
+            // i..j
+            for(int i=j-1;i>0;i--){
+
+                dp[i][j] = Integer.MAX_VALUE;
+
+                for(int k = i;k<=j;k++){
+                    dp[i][j] = Math.min(
+                            k + Math.max(/*i to k-1 */(k-1>=i?dp[i][k-1]:0),/*k+1 to j*/(k+1<=j?dp[k+1][j]:0)),
+                            dp[i][j]);
+
+
                 }
             }
         }
