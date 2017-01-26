@@ -28,6 +28,8 @@ import java.util.Arrays;
     						changes in elements on the right will not affect elements on the left
     
     canPartitionBottomUp -> left to right, more intuitive, but need to copy of the array to swap with
+
+    time complexity: M (sum of the array) * N (# of elements in the array)
     
  * @author jian.wang
  *
@@ -49,6 +51,9 @@ public class PartitionEqualSubsetSum {
             return false;
         }
         volumn /= 2;
+
+
+        // classic: can a subset of array adds up to a target?
         // dp def
         boolean[] dp = new boolean[volumn + 1];
         // dp init
@@ -98,5 +103,49 @@ public class PartitionEqualSubsetSum {
         	}
         }
         return dp[volumn];
+    }
+
+    // practise on 1/26/2017
+    public boolean canPartition(int[] nums) {
+
+        // 1. get the target
+        int sum = 0;
+        for(int n:nums){
+            sum+= n;
+        }
+        if(sum%2!=0){
+            return false;
+        }
+        int targetSum = sum/2;
+
+        // 2. classic dp
+        // target[i] means if a subset of the nums[] can sum up to i
+        boolean[] target  = new boolean[targetSum+1];
+        target[0] = true;
+
+        // from 1 to targetSum
+
+        /****
+         *
+         *
+         *  Since each element can be only used once, the loop has to start from the
+         *  candidate numbers to the sum
+         *
+         *
+         */
+
+
+        for(int i=1;i<=targetSum;i++){
+            for(int num:nums){
+                int previous = i-num;
+                target[i] = target[i]|| (previous<0?false:target[previous]);
+            }
+        }
+        return target[targetSum];
+    }
+
+    public static void main(String[] args){
+        PartitionEqualSubsetSum tester = new PartitionEqualSubsetSum();
+        System.out.println(tester.canPartition(new int[]{1,2,5}));
     }
 }
