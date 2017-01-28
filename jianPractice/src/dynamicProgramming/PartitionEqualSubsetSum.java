@@ -134,11 +134,15 @@ public class PartitionEqualSubsetSum {
          *
          */
 
+        // try each element
+        for(int n: nums){
 
-        for(int i=1;i<=targetSum;i++){
-            for(int num:nums){
-                int previous = i-num;
-                target[i] = target[i]|| (previous<0?false:target[previous]);
+            boolean[] targetBeforeUsingN = Arrays.copyOf(target,target.length);
+
+            // from [0,targetSum-n]
+            for(int i=0;i<=targetSum-n;i++){
+
+                target[i+n] = targetBeforeUsingN[i] || targetBeforeUsingN[i+n];
             }
         }
         return target[targetSum];
