@@ -1,6 +1,6 @@
 package dynamicProgramming;
 
-public class MaxSubarray {
+public class MaximumSubarray {
 
 	// key: maxEndWith[i] can use maxEndWith[i-1]
     public static int maxSubArray(int[] nums) {

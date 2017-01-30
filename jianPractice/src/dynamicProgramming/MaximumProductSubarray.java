@@ -29,7 +29,7 @@ public class MaximumProductSubarray {
         return result;
     }
 
-    // knowing i, how ot get j
+    // knowing i-1, how to get i (use variable name j)
     public int maxProduct(int[] nums) {
 
         if(nums ==null || nums.length==0 ) return 0;
@@ -37,10 +37,10 @@ public class MaximumProductSubarray {
 
         for (int i=1;i<nums.length;i++){
             // transition
-            int j_yes_max = Math.max(Math.max(i_yes_max*nums[i],nums[i]*i_yes_min),nums[i]);
-            int j_no_max = Math.max(i_yes_max,i_no_max);
-            int j_yes_min = Math.min(Math.min(i_yes_max*nums[i],nums[i]*i_yes_min),nums[i]);
-            int j_no_min = Math.min(i_yes_min,i_no_min);
+            int j_yes_max = maxOf(i_yes_max*nums[i],nums[i]*i_yes_min,nums[i]);
+            int j_no_max = maxOf(i_yes_max,i_no_max);
+            int j_yes_min = minOf(i_yes_max*nums[i],nums[i]*i_yes_min,nums[i]);
+            int j_no_min =minOf(i_yes_min,i_no_min);
 
             // move on
             i_yes_max = j_yes_max;
@@ -48,7 +48,22 @@ public class MaximumProductSubarray {
             i_yes_min = j_yes_min;
             i_no_min = j_no_min;
         }
+        return maxOf(i_no_max,i_yes_max);
+    }
 
-        return Math.max(i_no_max,i_yes_max);
+    public int minOf(int... nums){
+        int min = nums[0];
+        for(int i=1;i<nums.length;i++){
+            min = Math.min(min,nums[i]);
+        }
+        return min;
+    }
+
+    public int maxOf(int... nums){
+        int max = nums[0];
+        for(int i=1;i<nums.length;i++){
+            max = Math.max(max,nums[i]);
+        }
+        return max;
     }
 }

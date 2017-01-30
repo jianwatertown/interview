@@ -22,12 +22,13 @@ package dynamicProgramming;
  */
 public class BestTimeToBuyAndSellStock {
     public int maxProfit(int[] prices) {
-        int minSoFar = Integer.MAX_VALUE;
-        int profit = 0;
-        for(int price:prices){
-            minSoFar = Math.min(minSoFar,price);
-            profit = Math.max(profit,price-minSoFar);
+        if(prices==null||prices.length==0) {return 0;}
+        int low = prices[0];
+        int max = 0;
+        for(int i=1;i<prices.length;i++){
+            max = Math.max(max,prices[i]-low);
+            low = Math.min(low,prices[i]);
         }
-        return profit;
+        return max;
     }
 }

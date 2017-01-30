@@ -38,19 +38,4 @@ public class HouseRobber {
         }
         return Math.max(i_2_yes,i_2_no);
     }
-
-
-    // notice maxExcludeNow is needed
-    public int rob(int[] num, int start, int end){
-        int maxInclude = 0;
-        int maxExclude = 0;
-
-        for(int i=start;i<=end;i++){
-            int maxExcludeNow = Math.max(maxExclude,maxInclude);
-            int maxIncludeNow = Math.max(maxExclude+num[i] /*add current one*/,maxInclude /*previous max*/);
-            maxExclude = maxExcludeNow;
-            maxInclude = maxIncludeNow;
-        }
-        return Math.max(maxExclude,maxInclude);
-    }
 }
