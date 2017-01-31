@@ -24,29 +24,4 @@ public class MaximumSubarray {
     	}
     	return maxSoFar;
     }
-    
-    // sum = min_so_far
-    public int maxSubArray2(int[] nums){
-    	
-    	int l=0;
-    	int r=0;
-    	int min_idx=-1;
-    	int min_sum=0;
-    	int sum=0;
-    	int max_sum=0;
-    	
-    	for(int i=0;i<nums.length;i++){
-    		sum += nums[i];
-    		if(sum<min_sum){
-    			min_sum = sum;
-    			min_idx = i;
-    		}
-    		if(sum-min_sum>max_sum){
-    			max_sum	= sum - min_sum;
-    			l = min_idx+1;
-    			r = i+1;
-    		}
-    	}
-    	return 0;
-    }
 }

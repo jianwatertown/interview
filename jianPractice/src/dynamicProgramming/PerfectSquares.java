@@ -4,6 +4,9 @@ import java.util.Arrays;
 
 /**
  * Created by jianwang on 12/31/16.
+ *
+ * key is 2nd loop "for(int j=1;j*j<i;j++){"
+ *
  */
 public class PerfectSquares {
 
@@ -12,10 +15,11 @@ public class PerfectSquares {
 
         if(n<=0) {return 0;}
 
-        // result[i] saves the result of numSquares(i)
+        // we can use 1s at least
         int[] result = new int[n+1];
-        Arrays.fill(result,Integer.MAX_VALUE);
-        result[0] = 0;
+        for(int i=0;i<result.length;i++){
+            result[i] = i; // use 1
+        }
 
         // knowning i, try i-j*j
         for(int i=1;i<=n;i++){
