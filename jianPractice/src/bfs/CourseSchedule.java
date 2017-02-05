@@ -1,4 +1,4 @@
-package graph;
+package bfs;
 
 /**
  * There are a total of n courses you have to take, labeled from 0 to n - 1.
@@ -20,6 +20,8 @@ package graph;
     
     
  * @author jian.wang
+ *
+ * https://en.wikipedia.org/wiki/Disjoint-set_data_structure
  *
  */
 public class CourseSchedule {
