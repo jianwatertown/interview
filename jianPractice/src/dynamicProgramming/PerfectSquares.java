@@ -22,11 +22,18 @@ public class PerfectSquares {
         }
 
         // knowning i, try i-j*j
+        // use j*j, and result[i-j*j]
         for(int i=1;i<=n;i++){
-            for(int j=1;j*j<i;j++){
-                result[i] = Math.min(result[i],result[i-j*j]);
+            for(int j=1;j*j<=i;j++){
+                result[i] = Math.min(result[i],result[i-j*j]+1);
             }
         }
         return result[n];
     }
+
+    public static void main(String[] args){
+        PerfectSquares tester = new PerfectSquares();
+        System.out.println(tester.numSquares(4));
+    }
+
 }

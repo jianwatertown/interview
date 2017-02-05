@@ -15,6 +15,8 @@ public class Triangle {
 
         // path sum so far
         int[] result = new int[triangle.size()];
+
+        // result[i] initialized as the last row
         for(int i=0;i<result.length;i++){
             result[i] = triangle.get(triangle.size()-1).get(i);
         }
