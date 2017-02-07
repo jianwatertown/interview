@@ -1,5 +1,7 @@
 package bfs;
 
+import java.util.*;
+
 /**
  * There are a total of n courses you have to take, labeled from 0 to n - 1.
 
@@ -21,7 +23,10 @@ package bfs;
     
  * @author jian.wang
  *
- * https://en.wikipedia.org/wiki/Disjoint-set_data_structure
+ * Wrong: https://en.wikipedia.org/wiki/Disjoint-set_data_structure
+ * Correct: this problme use Topological-sort to solve
+ * https://www.youtube.com/watch?v=n_yl2a6n7nM
+ *
  *
  */
 public class CourseSchedule {
@@ -72,17 +77,18 @@ public class CourseSchedule {
     // classic root  with path compression
     public int root(int lookup,int[] id){
     	// until "your id == yourself"
-    	while(id[lookup]!=lookup){			// a.id -> b
-    		id[lookup] = id[id[lookup]];	// a.id -> b.id
-    		lookup=id[lookup];				// now look up for b
+    	while(id[lookup]!=lookup){
+    		id[lookup] = id[id[lookup]];
+    		lookup=id[lookup];
     	}
     	return lookup;
     }
     
     // union is the key here, it needs to find out circular relationships
     public boolean union(int[] id, int child, int parent){
-    	
+
     	int grandParent = root(parent,id);
+
     	if(grandParent==child){
     		return false;
     	}
@@ -91,7 +97,62 @@ public class CourseSchedule {
     		return true;
     	}
     }
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// practise Feb 6, 2017
+	// Topological sort
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// BFS
+	public boolean canFinishBFS(int numCourses, int[][] prerequisites) {
+
+		int[] outDegree = new int[numCourses];
+		Map<Integer,List> parents = new HashMap<>();
+		Queue<Integer> zeroDegree = new LinkedList<>();
+
+		// 1. set outdegree and edges
+		for(int[] pre: prerequisites){
+			outDegree[pre[0]] ++;
+			List<Integer> edges = parents.containsKey(pre[1])? parents.get(pre[1]) : new LinkedList<>();
+			edges.add(pre[0]);
+			parents.put(pre[1],edges);
+		}
+
+		// 2. find 0-degree nodes
+		for(int i=0;i<outDegree.length;i++){
+			if(outDegree[i]==0) {zeroDegree.add(i);}
+		}
+
+		// 3. remove 0-outdegree node and all the edges
+		int removed = 0;
+		while(!zeroDegree.isEmpty()){
+			// 4. parent
+			int parent = zeroDegree.poll();
+			removed++;
+			// 5. children
+			if(parents.containsKey(parent)){
+				List<Integer> children = parents.get(parent);
+				for(int child:children){
+					outDegree[child]--;
+					if(outDegree[child]==0){
+						zeroDegree.add(child);
+					}
+				}
+			}
+		}
+		return numCourses==removed;
+	}
+
+
+	public static void main(String[] args){
+		CourseSchedule tester = new CourseSchedule();
+		int[][] course = new int[1][2];
+		course[0] = new int[]{1,0};
+		System.out.println(tester.canFinishBFS(2, course));
+	}
 }
+
 
 
 
