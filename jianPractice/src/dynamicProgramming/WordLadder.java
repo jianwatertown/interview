@@ -4,7 +4,33 @@ import java.util.*;
 
 
 /***
- * 
+ *
+ *
+ * Given two words (beginWord and endWord), and a dictionary's word list, find the length of shortest transformation
+ * sequence from beginWord to endWord, such that:
+
+	 Only one letter can be changed at a time.
+	 Each transformed word must exist in the word list. Note that beginWord is not a transformed word.
+
+
+ For example,
+
+ Given:
+
+	 beginWord = "hit"
+	 endWord = "cog"
+	 wordList = ["hot","dot","dog","lot","log","cog"]
+
+	 As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+	 return its length 5.
+
+ Note:
+	 Return 0 if there is no such transformation sequence.
+	 All words have the same length.
+	 All words contain only lowercase alphabetic characters.
+	 You may assume no duplicates in the word list.
+	 You may assume beginWord and endWord are non-empty and are not the same.
+
  * 	If using DFS to compute the shortest path, the order of visiting nodes should first be topologically sorted. 
  * 	If it is not, there may be loops in the DFS forest (recursive tree). 
  *  For BFS, the visiting order is naturally topologically sorted.
@@ -12,9 +38,7 @@ import java.util.*;
  *   topologically sorted -> how far it is from the root
  * 	
  * 	BFS + Active pruning
- * 
- * 
- * @author jian.wang
+ *
  *
  */
 public class WordLadder {
@@ -75,7 +99,9 @@ public class WordLadder {
     
     public static void main(String[] args){
     	WordLadder w = new WordLadder();
-    	System.out.println(w.ladderLength("hot","dog", 
-    			new HashSet<String>(Arrays.asList("hot", "dog","dot"))));
-    }
+		int steps1 =  w.ladderLength("hot","dog",
+				new HashSet<String>(Arrays.asList("hot", "dog","dot")));
+
+		assert 1==steps1:"Expected steps1 = 3, but got " + steps1;
+	}
 }
