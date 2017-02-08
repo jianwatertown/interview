@@ -60,7 +60,46 @@ import java.util.Arrays;
 public class SentenceScreenFitting {
 
     public int wordsTyping(String[] sentence, int rows, int cols){
-        return 1;
+        int[] wordSizes = this.wordSizes(sentence);
+        int startingIndex = 0;
+        int result = 0;
+        for(int i = 0; i< rows;i++)
+        {
+            int previousSum = 0;
+            int sum = 0;
+            int remainedCols = cols;
+            for (int j = startingIndex; ;j++) {
+                if(j == wordSizes.length)
+                {
+                    startingIndex = 0;
+                    result ++;
+                    break;
+                }
+
+                sum = sum + wordSizes[j]+ 1;
+                if (sum > remainedCols) {
+                    startingIndex = j;
+                    remainedCols = cols - previousSum;
+                    if(remainedCols <= 0)
+                    {
+                        remainedCols = cols;
+                    }
+                    break;
+                }
+                previousSum = sum;
+            }
+        }
+        return result;
+    }
+
+    private int[] wordSizes(String[] sentence)
+    {
+        int[] result = new int[sentence.length];
+        for (int i = 0; i< sentence.length; i++) {
+            result[i] = sentence[i].length();
+        }
+
+        return result;
     }
 
 
