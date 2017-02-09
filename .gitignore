@@ -1,0 +1,6 @@
+.DS_Store
+.idea/*
+jianPractice/src/.idea/*
+jianPractice/src/jianPractice.iml
+jianPractice/src/out/*
+out/*
