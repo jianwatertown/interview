@@ -43,66 +43,61 @@ import java.util.*;
  */
 
 public class WordLadder {
-	
-//    public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
-//
-//    	if(beginWord.equals(endWord)){ return 0;}
-//
-//    	// BFS with 2 queues
-//    	Queue<String> currentLevel = new LinkedList<>();
-//    	int currentLevelCount = 1;
-//    	currentLevel.add(beginWord);
-//    	wordList.remove(beginWord);
-//    	int level = 1;
-//
-//    	while(!currentLevel.isEmpty()){
-//
-//			// 2. for node every level
-//			String current = currentLevel.poll();
-//			currentLevelCount--;
-//
-//			// 2.1 found it, return
-//			if(current.equals(endWord)) {
-//				return level;
-//			}
-//
-//			// 2.2 nope, add friends to next level
-//			currentLevel.addAll(getNextLevelUnvisited(current,wordList));
-//
-//    		if(currentLevelCount==0){
-//        		currentLevelCount = currentLevel.size();
-//        		level++;
-//    		}
-//    	}
-//    	return 0;
-//    }
-//
-//    // get all friends with distance one
-//    public Set<String> getNextLevelUnvisited(String myself, Set<String> wordList){
-//
-//    	Set<String> result = new HashSet<String>();
-//    	char[] myChars = myself.toCharArray();
-//    	for(int i=0;i<myChars.length;i++){
-//    		// replace each character
-//    		for(char newChar='a'; newChar<='z';newChar++){
-//    			myChars[i] = newChar;
-//    			String newWord=String.valueOf(myChars);
-//    			if(wordList.contains(newWord)){
-//    				result.add(newWord);
-//    				wordList.remove(newWord);
-//    			}
-//    		}
-//    		// reset character
-//    		myChars = myself.toCharArray();
-//    	}
-//    	return result;
-//    }
-//
-//    public static void main(String[] args){
-//    	WordLadder w = new WordLadder();
-//		int steps1 =  w.ladderLength("hot","dog",
-//				new HashSet<String>(Arrays.asList("hot", "dog","dot")));
-//
-//		assert 1==steps1:"Expected steps1 = 3, but got " + steps1;
-//	}
+
+	public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+
+		Set<String> wordSet = new HashSet<>(wordList);
+		Queue<String> q = new LinkedList<>();
+		q.add(beginWord);
+
+		int levelCount = 1;
+		int currentLevelRemaining = 1;
+		int nextLevelRemaining = 0;
+		while(!q.isEmpty()){
+
+			// 1. visit head
+			String word = q.poll();
+			currentLevelRemaining--;
+
+			// 2. find at current level
+			if(word.equals(endWord)){
+				return levelCount;
+			}
+
+			// 3. visit next level
+			Set<String> children = getNextLevelUnvisited(word, wordSet);
+			q.addAll(children);
+			nextLevelRemaining+=children.size();
+
+			// 4. complete one level
+			if(currentLevelRemaining==0){
+				levelCount++;
+				currentLevelRemaining = nextLevelRemaining;
+				nextLevelRemaining = 0;
+			}
+		}
+		return 0;
+	}
+
+
+	// get all friends with distance one
+	public Set<String> getNextLevelUnvisited(String myself, Set<String> wordList){
+
+		Set<String> result = new HashSet<String>();
+		char[] myChars = myself.toCharArray();
+		for(int i=0;i<myChars.length;i++){
+			// replace each character
+			for(char newChar='a'; newChar<='z';newChar++){
+				myChars[i] = newChar;
+				String newWord=String.valueOf(myChars);
+				if(wordList.contains(newWord)){
+					result.add(newWord);
+					wordList.remove(newWord);
+				}
+			}
+			// reset character
+			myChars = myself.toCharArray();
+		}
+		return result;
+	}
 }
