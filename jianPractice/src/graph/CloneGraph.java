@@ -9,21 +9,17 @@ import java.util.Queue;
 /**
  * 	Question: Clone an undirected graph. Each node in the graph contains a label and a list of its neighbors.
  * 
- * 	Solution:	
- * 		1.	create map<sourceNode,targetNode>
- * 		1.	DFS from root, and chain new node at the same time
- * 		2.	get new node from map when possible
+ * 	Solution:
+ * 		1. BFS, copy then put the node(original) into the queue for BFS
  *
+ * 	some of the friends is already copied in previous loops, some of the friends were just copied:
+ * 	so by now *ALL* friends are copied, we need to set *all* of "node"'s friends
  *
- *  The key to this question is to understand, both in BFS and DFS, when you are about to create a copy of node N
- *	by defintion some of N's frineds F1 have been visited, (that's how you come to N in the first place);
- *	some of the friends F2 are not, those are the ones to be copied.
+ * 	map.get(node).neighbors.add(map.get(friend));
  *
- *  So the idea is, don't worry about the relationship with F2. Only set the relationship with F1 set for the newly,
- *  created node N_COPY.
+ * 	Queue contains "the work to do", the original nodes have the relationships so it must be the original tree
  *
- *	this strategy will not work for
- *
+ * the key is to make sure when hyou
  *
  * @author jian.wang
  *
@@ -38,7 +34,9 @@ public class CloneGraph {
 
 		// map from original to copy nodes
 		Map<UndirectedGraphNode,UndirectedGraphNode> map = new HashMap<>();
-		// queue of copied original nodes
+
+		// queue of original nodes - all of those nodes have a copy in the hashmap
+		// now, we need to set "their copies" neighbours correctly
 		Queue<UndirectedGraphNode> q = new LinkedList<>();
 		q.add(root);
 		map.put(root,new UndirectedGraphNode(root.label));
@@ -57,8 +55,11 @@ public class CloneGraph {
 					UndirectedGraphNode frdCopy = new UndirectedGraphNode(friend.label);
 					map.put(friend, frdCopy);
 				}
-				// 4. for all of its friends, update "copied.neighors" to include this frdCopy
-				map.get(node).neighbors.add(map.get(friend));
+				// 4. for *all* of its friends, update "copied.neighors" to include this frdCopy
+				// map.get(node).neighbors.add(map.get(friend));
+				UndirectedGraphNode copyNode = map.get(node);
+				UndirectedGraphNode copyFrd = map.get(friend);
+				copyNode.neighbors.add(copyFrd);
 			}
 		}
 		return map.get(root);
