@@ -57,7 +57,7 @@ public class CloneGraph {
 					UndirectedGraphNode frdCopy = new UndirectedGraphNode(friend.label);
 					map.put(friend, frdCopy);
 				}
-				// 4. update "copied.neighors" to include this frdCopy
+				// 4. for all of its friends, update "copied.neighors" to include this frdCopy
 				map.get(node).neighbors.add(map.get(friend));
 			}
 		}
