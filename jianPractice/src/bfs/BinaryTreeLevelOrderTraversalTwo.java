@@ -10,7 +10,7 @@ import java.util.Queue;
  */
 public class BinaryTreeLevelOrderTraversalTwo {
 
-    public List<List<Integer>> levelOrder(TreeNode root) {
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
 
         // set up
         List<List<Integer>> result = new ArrayList<List<Integer>>();
@@ -40,7 +40,7 @@ public class BinaryTreeLevelOrderTraversalTwo {
 
             // 3. finish one level
             if(onLevel.size()==currentLevelMax){
-                result.add(onLevel);
+                result.add(0,onLevel);
                 onLevel = new LinkedList<>();
                 currentLevelMax = nextLevelMax;
                 nextLevelMax = 0;
