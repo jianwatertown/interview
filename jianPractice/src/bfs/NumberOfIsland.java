@@ -13,6 +13,8 @@ import java.util.Queue;
  *
  * @author jian.wang
  *
+ * Solution:
+ * 		bfs all inner nodes, get number of connected parts
  */
 public class NumberOfIsland {
 
