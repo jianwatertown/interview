@@ -18,8 +18,10 @@ import java.util.Set;
  *      If both the Vertices are in the same subset, a cycle is found.
  *
  *      1) make set for each node
- *      2) union: then union each edge, if 2 are already in the same set, return false
- *      3) find: find with compression
+ *      2) union: (make 2-level tree at most) then union each edge, if 2 are already in the same set, return false
+ *      3) find(flatten tree): find with compression
+ *
+ *      *REMEMBER*: need to call "find()" in the end to flatten the 1-level trees
  *
  */
 public class GraphValidTree {
@@ -39,8 +41,8 @@ public class GraphValidTree {
         }
 
         Set<Integer> treeRoots = new HashSet<>();
-        for(int root:id){
-            treeRoots.add(id[root]);
+        for(int x:id){
+            treeRoots.add(find(id,x));
         }
         return treeRoots.size()==1;
     }
@@ -70,5 +72,50 @@ public class GraphValidTree {
             x = id[x];          // now compress grandparent
         }
         return id[x];
+    }
+
+//    public boolean validTree(int n, int[][] edges) {
+//        // initialize n isolated islands
+//        int[] nums = new int[n];
+//        Arrays.fill(nums, -1);
+//
+//        // perform union find
+//        for (int i = 0; i < edges.length; i++) {
+//            int x = find(nums, edges[i][0]);
+//            int y = find(nums, edges[i][1]);
+//
+//            // if two vertices happen to be in the same set
+//            // then there's a cycle
+//            if (x == y) return false;
+//
+//            // union
+//            nums[x] = y;
+//        }
+//
+//        return edges.length == n - 1;
+//    }
+//
+//    int find(int nums[], int i) {
+//        if (nums[i] == -1) return i;
+//        return find(nums, nums[i]);
+//    }
+
+    // 4
+    // [[0,1],[2,3],[1,2]]
+    public static void main(String[] args){
+        GraphValidTree tester = new GraphValidTree();
+        int[][] input = new int[][]{
+                {0,1},{2,3},{1,2}
+        };
+        System.out.println(tester.validTree(4,input));
+    }
+
+
+
+    public static void printArray(int [] ar){
+        for(int i:ar){
+            System.out.print(i+" ");
+        }
+        System.out.println();
     }
 }
