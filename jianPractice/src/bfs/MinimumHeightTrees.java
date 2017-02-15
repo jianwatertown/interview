@@ -51,16 +51,21 @@ public class MinimumHeightTrees {
         int maxDistance = 0;
         Queue<Point> q = new LinkedList<>();
         q.add(new Point(start,0));
+        Set<Integer> visited = new HashSet<>();
+        visited.add(start);
 
         while(!q.isEmpty()){
             Point p = q.poll();
             // add all friends
             for(Integer c:map.get(p.val)){
-                if(!leaves.contains(p.val)) {
+                if(!visited.contains(c)&& !leaves.contains(c)) {
+                    visited.add(c);
                     Point childNode = new Point(c,p.distance+1);
+
                     q.add(childNode);
+
                     // update global max if needed
-                    distMap.put(distMap.get(c),childNode.distance);
+                    distMap.put(c,Math.max(distMap.get(c),childNode.distance));
 
                     maxDistance = Math.max(maxDistance,distMap.get(c));
                 }
@@ -101,8 +106,8 @@ public class MinimumHeightTrees {
     public static void main(String[] args){
         MinimumHeightTrees tester = new MinimumHeightTrees();
         int[][] input = new int [][]{
-            {3,0},{3,1},{3,2},{3,4},{5,4},
+            {0,1},{0,2},{0,3},{3,4},{5,4},
         };
-        System.out.println(tester.findMinHeightTrees(6,input));
+        System.out.println(tester.findMinHeightTrees(6,input)); // expected 3
     }
 }
