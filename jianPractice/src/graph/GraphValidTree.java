@@ -1,10 +1,9 @@
 package graph;
 
-import graph.NumberOfComponentsInGraph.CompressionFind;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import bfs.TreeNode;
+
+import java.util.*;
 
 
 /**
@@ -103,5 +102,121 @@ public class GraphValidTree {
 	
 	
 	
-	// ------------------------------------------------------------------ 
+	// ------------------------------------------------------------------
+	// DFS
+	// 			Notices
+	// 				1) DFS needs to pass the "parent node" down
+	// 				2) be careful of non-connected components
+	//
+	//
+	// ------------------------------------------------------------------
+	public boolean validTreeDFS(int n, int[][] edges) {
+
+		// 1. construct tree
+		Map<Integer, TreeNode>  treeMap = constructTreeMap(n,edges);
+
+
+		// 2. edge cases
+		if(edges.length==0){
+			return n==1;
+		}
+
+		// 3. dfs
+		Set<TreeNode> visited = new HashSet<>();
+		return dfsKnowingParent(visited,treeMap.get(edges[0][0]),null)&& (visited.size()==n);
+	}
+
+
+	// dfs and know it's parent
+	public boolean dfsKnowingParent(Set<TreeNode> visited, TreeNode root, TreeNode parent){
+
+		if(visited.contains(root)){
+			return false;
+		}
+		else{
+			visited.add(root);
+			boolean childNotVisited = true;
+			for(TreeNode child:root.children){
+				if(child!=parent){
+					childNotVisited = childNotVisited && dfsKnowingParent(visited,child,root);
+				}
+			}
+			return childNotVisited;
+		}
+	}
+
+	public Map<Integer, TreeNode> constructTreeMap(int n, int[][] edges){
+		Map<Integer, TreeNode>  treeMap = new HashMap<>();
+		for(int[] edge:edges){
+			TreeNode from = getNodeInMap(treeMap,edge[0]);
+			TreeNode to = getNodeInMap(treeMap,edge[1]);
+			from.children.add(to);
+			to.children.add(from);
+		}
+		return treeMap;
+	}
+
+	public TreeNode getNodeInMap(Map<Integer,TreeNode> map, int value){
+		if(!map.containsKey(value)){
+			TreeNode n = new TreeNode(value,new HashSet<>());
+			map.put(value,n);
+		}
+		return map.get(value);
+	}
+
+	public static class TreeNode{
+		public int value;
+		public Set<TreeNode> children = new HashSet<>();
+		public TreeNode(int v, Set<TreeNode> children){
+			this.children = children;
+			this.value = v;
+		}
+	}
+
+	// ------------------------------------------------------------------
+	// 	BFS
+	//		1. knowing the parent
+	//		2. always put into visited before enqueuing
+	// ------------------------------------------------------------------
+	public boolean validTreeBFS(int n, int[][] edges) {
+
+		// 1. construct tree
+		Map<Integer, TreeNode>  treeMap = constructTreeMap(n,edges);
+		Map<TreeNode,TreeNode> parentMap = new HashMap<>();
+
+		// 2. edge cases
+		if(edges.length==0){
+			return n==1;
+		}
+
+		// 3. bfs
+		Queue<TreeNode> q = new LinkedList<>();
+		q.add(treeMap.get(edges[0][0]));
+		parentMap.put(treeMap.get(edges[0][0]),null /*fake tree head*/);
+		Set<TreeNode> visited = new HashSet<>();
+		visited.add(treeMap.get(edges[0][0]));
+
+		while(!q.isEmpty()){
+			TreeNode parent = q.poll();
+
+			// for all the next nevel
+			for(TreeNode child: parent.children){
+
+				// make sure "child -> parent -> child" is not used
+				if(parentMap.get(parent)!=child){
+					// cycle
+					if(visited.contains(child)){
+						return false;
+					}
+					else{
+						visited.add(child);
+						q.add(child);
+						parentMap.put(child,parent);
+					}
+				}
+			}
+		}
+		return (visited.size()==n);
+	}
+
 }
