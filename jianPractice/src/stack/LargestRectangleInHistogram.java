@@ -158,42 +158,35 @@ public class LargestRectangleInHistogram {
         }
         return max;
     }
-    
-    
-    // divide and conqure 
-    public int largestRectangleAreaDivideAndConque(int[] heights){
-    	return helper(heights,0,heights.length-1);
-    }
-    
-    public int helper(int[] heights, int start, int end){
 
-    	// 1.base cases
-    	// out of bound
-    	if(start>end || start<0 || end>=heights.length){return 0;}
-    	// only 1 bar
-    	if(start==end) {return heights[start];}
+    // to keep the distance , we need to put the indexes, not the height in the stack
+	public int largestRectangleArea(int[] heights) {
 
-    	// 2. compute the left and right part
-    	int mid = (start+end)/2;
-    	int leftPart = helper(heights,start,mid);				// make sure  *mid* is not ignored
-    	int rightPart = helper(heights,mid+1,end);				
+    	Stack<Integer> stack = new Stack();
+		int index = 0;
+		int max = 0;
 
-    	// 3. compute the area with middle
-    	int leftStart = mid;
-    	int rightEnd = mid+1;
-    	        	
-    	int middleHeight = Math.min(heights[mid],heights[mid+1]);
-    	int middleArea = middleHeight * 2;
-    	
-    	
-    	while(leftStart>=start && rightEnd<=end){
-    		// TODO finish the complex logic here
-    	}
-    	
-    	return Math.max(Math.max(leftPart, rightPart),middleArea);
-    }
-    
-    public static void main(String[] args){
+		while(index<=heights.length){
+
+			int height = (index==heights.length)?-1:heights[index]; // put -1 dummy index to pop everything in the stack
+
+			// 1. if height is higher, put into the stack
+			if(stack.isEmpty()||height>=stack.peek()){
+				stack.add(index++);
+			}
+			// 2. something in the stack is bigger, current height cannot be used to compute the size
+			// not wa don't need to change index here
+			else{
+				int popUpIndex = stack.pop();
+				int popupSize = heights[popUpIndex] * (index-popUpIndex-1);
+				max = Math.max(max,popupSize);
+			}
+		}
+    	return max;
+	}
+
+
+	public static void main(String[] args){
     	
     	int[] heights0 = {3,5,5,2,5,5,6,6,4,4};	// 24
     	int[] heights1 = {100,4};				// 100
