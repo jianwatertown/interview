@@ -24,7 +24,7 @@ public class SequenceReconstruction {
                 int start = edge.get(i);
                 int end = edge.get(i+1);
 
-                if(start)
+                if(start==end) {return false;}
 
                 Set<Integer> startEdges = next.containsKey(start)? next.get(start): new HashSet<>();
                 // only for new edges
@@ -51,7 +51,8 @@ public class SequenceReconstruction {
         }
 
         // 3. more than 1 root or no root - bad
-        if(zeroDegree.size()>1 || singlePoint.size()>1) || zeroDegree==1){
+        if(zeroDegree.size()>1 || singlePoint.size()>1 ||           // 2 roots
+                zeroDegree.size()==1){
             return false;
         }
 
