@@ -19,7 +19,7 @@ public class BalancedBinaryTree {
             return -1;
         }
         else{
-            return Math.max(left,right);
+            return Math.max(left,right)+1 /* Haaaaaaaaa!!! */;
         }
     }
 }
