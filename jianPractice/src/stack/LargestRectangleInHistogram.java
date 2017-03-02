@@ -28,6 +28,10 @@ public class LargestRectangleInHistogram {
 				int popUpIndex = stack.pop();
 
                 // stack.peek() is the one *left* to the one getting popped, that's as far as it can go
+
+                // 2,1,5,3,6,4,4,4,4,0
+                // for histogram at index==5 (first 4)
+                // width = index(0) - index(3) - 1
                 int width = (stack.isEmpty() ? index : index - stack.peek() - 1);
 				max = Math.max(max, heights[popUpIndex] * width);
 			}
