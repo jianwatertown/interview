@@ -16,13 +16,8 @@ public class ConstructTreePostOrder {
     	TreeNode root = new TreeNode(postorder[postEnd]);
 
     	// 2. find root index in inorder
-    	int inOrderRootIndex = findIndex(inStart,root.val,inorder);
-    	
-    	// 3. use in-order sequence to get the size of each size
-    	int inOrderLeftSize = inOrderRootIndex - inStart;
-    	int inOrderRightSize = inEnd - inOrderRootIndex;
-    	
-    	
+    	int index = findIndex(inStart,root.val,inorder);
+
     	// ---------------------------------------------------------------------------------------------
     	//
     	//		Key to this question is the index manipulation, pay attention to the "-1" part
@@ -30,15 +25,15 @@ public class ConstructTreePostOrder {
     	// ---------------------------------------------------------------------------------------------
     	// 4. get this recursively
     	root.left = buildTree(postorder,inorder,
-    			postEnd-1-inOrderLeftSize-inOrderRightSize+1,
-    			postEnd-1-inOrderRightSize,
-    			inOrderRootIndex-inOrderLeftSize,
-    			inOrderRootIndex-1);
+    			postStart,
+				postStart + (index-inStart) - 1, // index-inStart is the size of left tree
+    			inStart,
+				index-1);
     	root.right = buildTree(postorder,inorder,
-    			postEnd-1-inOrderLeftSize+1,
+    			postStart + (index-inStart),
     			postEnd-1,
-    			inOrderRootIndex+1,
-    			inOrderRootIndex+1+inOrderRightSize-1);
+    			index+1,
+    			inEnd);
     
     	return root;
     }

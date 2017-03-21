@@ -46,6 +46,7 @@ public class CloneGraph {
 
 			// 1. get node
 			UndirectedGraphNode node = q.poll();
+			UndirectedGraphNode copyNode = map.get(node);
 
 			// 2. for each friend
 			for (UndirectedGraphNode friend : node.neighbors) {
@@ -57,7 +58,6 @@ public class CloneGraph {
 				}
 				// 4. for *all* of its friends, update "copied.neighors" to include this frdCopy
 				// map.get(node).neighbors.add(map.get(friend));
-				UndirectedGraphNode copyNode = map.get(node);
 				UndirectedGraphNode copyFrd = map.get(friend);
 				copyNode.neighbors.add(copyFrd);
 			}
