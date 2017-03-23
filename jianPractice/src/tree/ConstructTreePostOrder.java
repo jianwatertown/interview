@@ -2,13 +2,14 @@ package tree;
 
 public class ConstructTreePostOrder {
 	
-    public TreeNode buildTree(int[] postorder, int[] inorder) {
+    public TreeNode buildTree(int[] inorder,int[] postorder) {
     	return buildTree(postorder, inorder, 0, postorder.length-1, 0, inorder.length-1);
     }
     
     public TreeNode buildTree(int[] postorder, int[] inorder, int postStart, int postEnd, int inStart, int inEnd){
-
+		System.out.println(postStart+" "+postEnd+ " "+inStart+" "+inEnd);
     	// make sure we are in bound
+		// if(pS>pE||iS>iE||pS<0||pE>=pre.length||iS<0||iE>=in.length){return null;}
     	if(postStart>postEnd || postStart<0 || postEnd>postorder.length-1) {return null;}
     	if(inStart>inEnd || inStart<0 || inEnd>inorder.length-1) {return null;}
     	
@@ -47,9 +48,10 @@ public class ConstructTreePostOrder {
     
     public static void main(String[] args){
 
-		int[] postOrder = {1,2,3,4};
-		int[] inOrder = {1,3,4,2};
-		
+		int[] postOrder = {1,3,2};
+    	int[] inOrder = {3,2,1};
+
+
 		ConstructTreePostOrder cons = new ConstructTreePostOrder();
 		System.out.println(cons.buildTree(postOrder, inOrder).val);
     }
