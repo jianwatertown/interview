@@ -1,40 +1,34 @@
 package dfs;
 
-/**
- * Created by jianwang on 3/6/17.
- */
 public class PopulatingNextRightPointersInEachNodeTwo {
 
     public void connect(TreeLinkNode root) {
         if(root==null) {return;}
 
-        // 1. connect immediate children first
+        // 1. find what right.next
+        TreeLinkNode rightNext = findFirstLeft(root.next);
+
+        // 2. right first
         if(root.right!=null){
-            
+            root.right.next = rightNext;
+            rightNext = root.right; // save some typing.
         }
 
-
-        if(root.left!=null){
-
-            if(root.right)
-
-            root.left.next = root.right==null? findFirstLeft(root):right.n;
-            // 2. connect right child to my sibling's left
-            if(root.next!=null && root.right!=null /*protected by root.left!=null already*/){
-                root.right.next = root.next.left;
-            }
+        // 3. now left
+        if (root.left!=null){
+            root.left.next = rightNext;
         }
 
-        // 2. move on
-        connect(root.left);
+        // 3. move on
         connect(root.right);
+        connect(root.left);
     }
 
     TreeLinkNode findFirstLeft(TreeLinkNode root){
         while(root!=null){
             if(root.left!=null) {return root.left;}
             if(root.right!=null) {return root.right;}
-            root = root.right;
+            root = root.next;
         }
         return null;
     }
