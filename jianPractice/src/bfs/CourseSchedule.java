@@ -23,100 +23,26 @@ import java.util.*;
     
  * @author jian.wang
  *
- * Wrong: https://en.wikipedia.org/wiki/Disjoint-set_data_structure
- * Correct: this problme use Topological-sort to solve
- * https://www.youtube.com/watch?v=n_yl2a6n7nM
- *
  *
  */
 public class CourseSchedule {
 	
-	/**
-	 * This is a disjoint-set problem, steps 
-	 * 
-	 * 	
-	 * 1. make set for each element
-	 * 2. for every edge, call "union"
-	 * 2. count how many root node there is 
-	 * 
-	 * Time: Edge * LogN
-	 * 
-	 * Disjoint-Set revisit: with root compression, but not *weighted* as who is root is determined
-	 * 
-	 *  0. keep a size
-	 *  
-	 * 	1. find{call root()}
-	 *  2. root{recursively call root()}
-	 *  3. union{child root-> parent root}
-	 * 
-	 */
-    public boolean canFinish(int numCourses, int[][] prerequisites) {
-
-        //0. edge case
-        if(prerequisites==null || prerequisites.length<1){return true;}
-
-    	// 1. construct forest
-    	int id[] = new int[numCourses];    	
-    	for(int i=0;i<numCourses;i++){
-    		id[i] = i;
-    	}    	
-    	
-    	// 2. go through the edges
-    	for(int[] relation:prerequisites){
-    		// 3. if cannot make a union, quite the loop
-    		if(!union(id,relation[0],relation[1])){
-    			return false;
-    		}
-    	}
-    	
-    	// 4. ok!
-    	return true;
-    }
-    
-    
-    // classic root  with path compression
-    public int root(int lookup,int[] id){
-    	// until "your id == yourself"
-    	while(id[lookup]!=lookup){
-    		id[lookup] = id[id[lookup]];
-    		lookup=id[lookup];
-    	}
-    	return lookup;
-    }
-    
-    // union is the key here, it needs to find out circular relationships
-    public boolean union(int[] id, int child, int parent){
-
-    	int grandParent = root(parent,id);
-
-    	if(grandParent==child){
-    		return false;
-    	}
-    	else{
-    		id[child] = grandParent;
-    		return true;
-    	}
-    }
-
-
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// practise Feb 6, 2017
+	// practise March 27, 2017
 	// Topological sort
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// BFS
-	public boolean canFinishBFS(int numCourses, int[][] prerequisites) {
+	public boolean canFinish(int numCourses, int[][] prerequisites) {
 
 		int[] outDegree = new int[numCourses];
-		Map<Integer,List> parents = new HashMap<>();
+		Map<Integer,List> toLearn = new HashMap<>();
 		Queue<Integer> zeroDegree = new LinkedList<>();
 
 		// 1. set outdegree and edges
 		for(int[] pre: prerequisites){
 			outDegree[pre[0]] ++;
-			List<Integer> edges = parents.containsKey(pre[1])? parents.get(pre[1]) : new LinkedList<>();
-			edges.add(pre[0]);
-			parents.put(pre[1],edges);
+			toLearn.computeIfAbsent(pre[1],k-> new LinkedList()).add(pre[0]);
 		}
 
 		// 2. find 0-degree nodes
@@ -131,8 +57,8 @@ public class CourseSchedule {
 			int parent = zeroDegree.poll();
 			removed++;
 			// 5. children
-			if(parents.containsKey(parent)){
-				List<Integer> children = parents.get(parent);
+			if(toLearn.containsKey(parent)){
+				List<Integer> children = toLearn.get(parent);
 				for(int child:children){
 					outDegree[child]--;
 					if(outDegree[child]==0){
@@ -144,12 +70,11 @@ public class CourseSchedule {
 		return numCourses==removed;
 	}
 
-
 	public static void main(String[] args){
 		CourseSchedule tester = new CourseSchedule();
 		int[][] course = new int[1][2];
 		course[0] = new int[]{1,0};
-		System.out.println(tester.canFinishBFS(2, course));
+		System.out.println(tester.canFinish(2, course));
 	}
 }
 
