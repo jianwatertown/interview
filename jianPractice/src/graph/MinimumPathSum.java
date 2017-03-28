@@ -9,6 +9,6 @@ package graph;
 
 public class MinimumPathSum {
     public int minPathSum(int[][] grid) {
-
+        return -1;
     }
 }

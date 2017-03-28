@@ -162,8 +162,10 @@ public class PartitionEqualSubsetSum {
         }
         int targetSum = sum / 2;
 
-        // 2. classic dp
-        // target[i] means if a subset of the nums[] can sum up to i
+        return subsetSum(nums,targetSum)>=1;
+    }
+
+    public int subsetSum(int[] nums, int targetSum){
         int[] target = new int[targetSum + 1];
         target[0] = 1;
 
@@ -172,12 +174,15 @@ public class PartitionEqualSubsetSum {
                 target[s] += target[s-num];
             }
         }
-        return target[targetSum]>=1;
+        return target[targetSum];
     }
-
 
     public static void main(String[] args){
         PartitionEqualSubsetSum tester = new PartitionEqualSubsetSum();
-        System.out.println(tester.canPartition(new int[]{1,2,5}));
+        System.out.println(tester.canPartition2(new int[]{1,5,5,11}));
+        System.out.println(tester.canPartition2(new int[]{1,2,5}));
+        int[] funny = new int[]{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
+        System.out.println(tester.canPartition2(funny));
+
     }
 }
