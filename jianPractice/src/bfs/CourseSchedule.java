@@ -23,7 +23,7 @@ import java.util.*;
     
  * @author jian.wang
  *
- * Wrong: https://en.wikipedia.org/wiki/Disjoint-set_data_structure
+ * Wrong: https://en.wikipedia.org/wiki/Disjoint-set_data_structure !!!!!
  * Correct: this problme use Topological-sort to solve
  * https://www.youtube.com/watch?v=n_yl2a6n7nM
  *
@@ -85,17 +85,14 @@ public class CourseSchedule {
     }
     
     // union is the key here, it needs to find out circular relationships
-    public boolean union(int[] id, int child, int parent){
+    public boolean union(int[] ids, int child, int parent){
 
-    	int grandParent = root(parent,id);
+    	int i = root(child,ids);
+    	int j = root(parent,ids);
 
-    	if(grandParent==child){
-    		return false;
-    	}
-    	else{
-    		id[child] = grandParent;
-    		return true;
-    	}
+    	if(i==j) {return false;}
+		ids[j] = i;
+		return true;
     }
 
 

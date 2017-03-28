@@ -148,6 +148,34 @@ public class PartitionEqualSubsetSum {
         return target[targetSum];
     }
 
+
+    // practise on 3/28/2017, notice the return expression, this method gives the counter
+    public boolean canPartition2(int[] nums) {
+
+        // 1. get the target
+        int sum = 0;
+        for (int n : nums) {
+            sum += n;
+        }
+        if (sum % 2 != 0) {
+            return false;
+        }
+        int targetSum = sum / 2;
+
+        // 2. classic dp
+        // target[i] means if a subset of the nums[] can sum up to i
+        int[] target = new int[targetSum + 1];
+        target[0] = 1;
+
+        for(int num:nums){
+            for(int s=targetSum;s-num>=0;s--){
+                target[s] += target[s-num];
+            }
+        }
+        return target[targetSum]>=1;
+    }
+
+
     public static void main(String[] args){
         PartitionEqualSubsetSum tester = new PartitionEqualSubsetSum();
         System.out.println(tester.canPartition(new int[]{1,2,5}));
