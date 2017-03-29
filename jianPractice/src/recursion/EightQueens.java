@@ -2,10 +2,12 @@ package recursion;
 
 import java.util.Arrays;
 
-// idea: basically a decision tree
-// data structure: use a int[x]=y to denote point(x,y) has something
-// 					level says which level we are on, right now
-// use int[].clone
+// idea: row level recursion,
+// since each row can have only 1 queen
+//
+// 		use a int[x]=y to denote point(x,y) has a queen
+//
+// *use int[].clone* or reset the board
 // 92 solutions in total
 
 public class EightQueens {
@@ -19,7 +21,7 @@ public class EightQueens {
 	public void printEightQueens(int[] board, int row){
 		
 		// 1. base case, max level
-		if(row>=8){
+		if(row==8){
 			for(int i=0;i<8;i++){
 				System.out.println("x="+i+" y="+board[i]);
 			}
@@ -33,6 +35,8 @@ public class EightQueens {
 					board[row] = column;
 					// go to next level
 					printEightQueens(board.clone(), row+1);
+					// reset the board
+					board[row] = -1;
 				}
 			}
 		}

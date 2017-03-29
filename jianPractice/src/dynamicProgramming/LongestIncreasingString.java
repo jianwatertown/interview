@@ -8,35 +8,31 @@ import sortAndSearch.BinarySearch;
 	Note that there may be more than one LIS combination, it is only necessary for you to return the length.
 
 	Your algorithm should run in O(n2) complexity.
-	
-	
-	Leetcode answer is busted
-	
- * @author jian.wang
- *
+
  */
 // called "Longest Increasing Subsequence" on LeetCode
 public class LongestIncreasingString {
 
-	
+
 	// Power(n,2) solution
 	public int lengthOfLISNN(int[] nums) {
-		
+
 		int max_sequence_length = 0;
-		
-		for(int i=0;i<nums.length;i++){
-			
-			// *key*: j stands on the end of the increasing index
-			for(int j=i;j<nums.length;j++){
-				if(j==nums.length-1 || nums[j+1]<nums[j]){
-					max_sequence_length = Math.max(max_sequence_length,j-i+1);
-					break;
+
+		for(int begin=0;begin<nums.length;begin++){
+			int last = nums[begin];
+			int max = 1;
+			for(int end=begin+1;end<nums.length;end++){
+				if(last<nums[end]){
+					last = nums[end];
+					max++;
 				}
 			}
+			max_sequence_length = Math.max(max_sequence_length,max);
 		}
 		return max_sequence_length;
     }
-	
+
 /**
  * tails is an array storing the smallest tail of all increasing subsequences with length i+1 in tails[i].
     For example, say we have nums = [4,5,6,3], then all the available increasing subsequences are:
