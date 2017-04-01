@@ -7,7 +7,8 @@ import java.util.Map;
 import java.util.Queue;
 
 /**
- * 	Question: Clone an undirected graph. Each node in the graph contains a label and a list of its neighbors.
+ * 	Question: Clone an undirected graph. Each node in the graph contains a label and a list of its
+ * 	neighbors.
  * 
  * 	Solution:
  * 		1. BFS, copy then put the node(original) into the queue for BFS
@@ -17,9 +18,10 @@ import java.util.Queue;
  *
  * 	map.get(node).neighbors.add(map.get(friend));
  *
- * 	Queue contains "the work to do", the original nodes have the relationships so it must be the original tree
+ * 	Queue contains "the work to do", the original nodes have the relationships so it must be the
+ * 	original tree
  *
- * the key is to make sure when hyou
+ *	the key is to make sure when hyou
  *
  * @author jian.wang
  *
@@ -57,6 +59,9 @@ public class CloneGraph {
 					map.put(friend, frdCopy);
 				}
 				// 4. for *all* of its friends, update "copied.neighors" to include this frdCopy
+				//
+				//		(friends) including the existing nodes that have been previously created
+				//
 				// map.get(node).neighbors.add(map.get(friend));
 				UndirectedGraphNode copyFrd = map.get(friend);
 				copyNode.neighbors.add(copyFrd);

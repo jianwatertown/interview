@@ -1,4 +1,4 @@
-package dynamicProgramming;
+package recursion;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,7 +46,7 @@ public class PowerSet {
 	
 	public static void main(String[] args){
 		PowerSet sub = new PowerSet();
-		Integer[] intArray = {1,2,3};
+		Integer[] intArray = {1,2,3,1};
 		ArrayList<ArrayList<Integer>> subsets = sub.getAllSubsets(new ArrayList<Integer>(Arrays.asList(intArray)));
 		for(ArrayList<Integer> set:subsets){
 			for(Integer i:set){

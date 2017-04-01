@@ -6,13 +6,13 @@ public class MagicIndex {
  * Tricky when the numbers are not unique	
  * 
  * Great base case break down
- * 	index	[0,1,2,3,4,5,6,7,8]
- * 	input	[3,4,5,6,6,6,7,8,8]
- *  look at index = 4, input = 6 -> right: at least starting at 6(input), left starts at 3(4-1)
- * 
- *  index	[ 0, 1, 2, 3,4,5,6,7,8]
- * 	input	[-5,-4,-3, 0,0,1,5,5,5]
- *  look at index index 4, input 0 -> right: 4+1, left at least 0 (index[4])
+	 * 	index	[0,1,2,3,4,5,6,7,8]
+	 * 	input	[3,4,5,6,6,6,7,8,8]
+	 *  look at index = 4, input = 6 -> right: at least starting at 6(input), left starts at 3(4-1)
+	 *
+	 *  index	[ 0, 1, 2, 3,4,5,6,7,8]
+	 * 	input	[-5,-4,-3, 0,0,1,5,5,5]
+	 *  look at index index 4, input 0 -> right: 4+1, left at least 0 (index[4])
  *  
  *  So:
  *  index<=input[index] left = index-1, right = input[index]
