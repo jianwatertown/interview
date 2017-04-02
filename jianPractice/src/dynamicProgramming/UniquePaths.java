@@ -2,9 +2,6 @@ package dynamicProgramming;
 
 import java.util.Arrays;
 
-/**
- * Created by jianwang on 2/1/17.
- */
 public class UniquePaths {
 
     public int uniquePaths(int m, int n) {
