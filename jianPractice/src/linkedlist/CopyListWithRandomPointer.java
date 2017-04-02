@@ -19,31 +19,31 @@ import java.util.Map;
  */
 public class CopyListWithRandomPointer {
 	
-    public DirtyListNode copyRandomList(DirtyListNode head) {
+    public RandomListNode copyRandomList(RandomListNode head) {
         if(head==null) return null;
-    	Map<DirtyListNode,DirtyListNode> map = new HashMap<DirtyListNode,DirtyListNode>();
+    	Map<RandomListNode, RandomListNode> map = new HashMap<RandomListNode, RandomListNode>();
     	copyRandomList(head,map);
     	return map.get(head);
     }
-    
-    public void copyRandomList(DirtyListNode head, Map<DirtyListNode,DirtyListNode> map) {
+
+    public void copyRandomList(RandomListNode head, Map<RandomListNode, RandomListNode> map) {
 
     	if(head==null) return;
-    	
+
     	// 1. create node and put into cache
-    	DirtyListNode copy = new DirtyListNode(head.value);
+    	RandomListNode copy = new RandomListNode(head.label);
     	map.put(head,copy);
-    
+
     	// 2. copy next
     	if(head.next!=null && !map.containsKey(head.next)){
     		copyRandomList(head.next, map);
     	}
     	copy.next = map.get(head.next);
-    	
+
     	// 3. copy random
-    	if(head.dirty!=null && !map.containsKey(head.dirty)){
-    		copyRandomList(head.dirty, map);
-    	}    	
-    	copy.dirty = map.get(head.dirty);
+    	if(head.random !=null && !map.containsKey(head.random)){
+    		copyRandomList(head.random, map);
+    	}
+    	copy.random = map.get(head.random);
     }
 }
