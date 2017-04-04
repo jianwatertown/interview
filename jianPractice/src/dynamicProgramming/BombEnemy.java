@@ -17,7 +17,7 @@ package dynamicProgramming;
 
 	return 3. (Placing a bomb at (1,1) kills 3 enemies)
 
-
+	Looks like you can only drop the bomb on a '0'
  * @author jian.wang
  *
  */
