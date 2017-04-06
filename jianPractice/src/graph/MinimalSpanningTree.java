@@ -38,8 +38,8 @@ public class MinimalSpanningTree {
     // 3. keep doing 2 until count==1
 
 
-    static Comparator<IntegerEdge> comp = new Comparator<IntegerEdge>() {
-        public int compare(IntegerEdge a, IntegerEdge b) {
+    static Comparator<CostEdge> comp = new Comparator<CostEdge>() {
+        public int compare(CostEdge a, CostEdge b) {
             // use cost
             if (a.cost != b.cost)
                 return a.cost - b.cost;
@@ -53,7 +53,7 @@ public class MinimalSpanningTree {
         }
     };
 
-    public Set<IntegerEdge> miniTree(List<IntegerEdge> edges,int size) {
+    public Set<CostEdge> miniTree(List<CostEdge> edges, int size) {
 
         // 1. sort the edges O(eLogE)
         Collections.sort(edges, comp);
@@ -63,7 +63,7 @@ public class MinimalSpanningTree {
         for(int i=0;i<=size;i++){
             ids[i] = i;
         }
-        Set<IntegerEdge> tree = new HashSet<>();
+        Set<CostEdge> tree = new HashSet<>();
 
         // 3. Kruskal algorithm
         for(int k=0;k<edges.size();k++){
@@ -114,23 +114,23 @@ public class MinimalSpanningTree {
     }
 
     public static void main(String[] args){
-        List<IntegerEdge> edges = new LinkedList<>();
-        edges.add(new IntegerEdge(1,4,5));
-        edges.add(new IntegerEdge(3,5,5));
-        edges.add(new IntegerEdge(1,2,7));
-        edges.add(new IntegerEdge(2,5,7));
-        edges.add(new IntegerEdge(5,6,8));
-        edges.add(new IntegerEdge(5,7,9));
-        edges.add(new IntegerEdge(2,4,9));
-        edges.add(new IntegerEdge(6,7,11));
-        edges.add(new IntegerEdge(4,5,15));
-        edges.add(new IntegerEdge(2,3,8));
-        edges.add(new IntegerEdge(4,6,6));
+        List<CostEdge> edges = new LinkedList<>();
+        edges.add(new CostEdge(1,4,5));
+        edges.add(new CostEdge(3,5,5));
+        edges.add(new CostEdge(1,2,7));
+        edges.add(new CostEdge(2,5,7));
+        edges.add(new CostEdge(5,6,8));
+        edges.add(new CostEdge(5,7,9));
+        edges.add(new CostEdge(2,4,9));
+        edges.add(new CostEdge(6,7,11));
+        edges.add(new CostEdge(4,5,15));
+        edges.add(new CostEdge(2,3,8));
+        edges.add(new CostEdge(4,6,6));
 
-        Set<IntegerEdge> miniTree = new MinimalSpanningTree().miniTree(edges,7);
+        Set<CostEdge> miniTree = new MinimalSpanningTree().miniTree(edges,7);
         System.out.println("result:");
         int sum = 0;
-        for(IntegerEdge edge:miniTree){
+        for(CostEdge edge:miniTree){
             sum+=edge.cost;
             System.out.println(edge);
         }
