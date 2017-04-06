@@ -1,62 +1,44 @@
 package dynamicProgramming;
 
+
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 
 /**
  * Given a set of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers 
  * sums to T. The same repeated number may be chosen from C unlimited number of times.
  * 
- * For example, given candidate set [2, 3, 6, 7] and target 7, 
- * @author jian.wang
+ * For example, given candidate set [2, 3, 6, 7] and target 7,
  *
+ *
+ * A general approach to backtracking questions in Java (Subsets, Permutations, Combination Sum, Palindrome Partitioning)
  */
 public class CombinationSum {
 
-	public List<List<Integer>> combinationSum(int[] candidates, int target) {
-		Set<List<Integer>> setResult = combinationSum(candidates, target, new HashMap<Integer,Set<List<Integer>>>());
-		return new ArrayList(setResult);
+
+	public List<List<Integer>> combinationSum(int[] nums, int target) {
+		List<List<Integer>> result = new ArrayList<>();
+		Arrays.sort(nums);
+		backtrack(result,new ArrayList<>(), nums,target,0);
+		return result;
 	}
-	
-	public Set<List<Integer>> combinationSum(int[] candidates, int target, Map<Integer,Set<List<Integer>>> cache) {
-		
-		// 1. cache
-		if(cache.containsKey(target)) {return cache.get(target);}
-		
-		// 2. base case
-		if(target==0){
-			Set<List<Integer>> result = new HashSet<List<Integer>>();
-			result.add(new ArrayList<Integer>());
-			cache.put(0, result);
-			return result;
-		}
-		else if(target<-1){
-			return null;
-		}
-		// 3. normal case
+
+	// backtrack means: It is however possible that during construction, you realize that the solution is not successful
+	// (does not satisfy certain constraints), then you backtrack: you undo certain assignments of values to variables in order to reassign them.
+	public void backtrack(List<List<Integer>> result, List<Integer> soFar, int[] nums, int remain, int start){
+
+		if(remain<0){ return;}											// backtrack
+		else if(remain==0){ result.add(new LinkedList<>(soFar));}		// found answer, remember to copy
 		else{
-			Set<List<Integer>> result = new HashSet<List<Integer>>();
-			for(int can:candidates){
-				Set<List<Integer>> subResults = combinationSum(candidates, target-can, cache);
-				// valid array only
-				if(subResults!=null){
-					for(List<Integer> oneResult:subResults){
-						List<Integer> copiedResult =  new ArrayList<>();
-						copiedResult.addAll(oneResult);
-						copiedResult.add(can);
-						Collections.sort(copiedResult);
-						result.add(copiedResult);
-					}
-				}
+			for(int i=start;i<nums.length;i++){							// can only use start and after
+				soFar.add(nums[i]);
+				backtrack(result,soFar,nums,remain-nums[i],i);		// i and onwards
+				soFar.remove(soFar.size()-1);
 			}
-			cache.put(target, result.size()!=0?result:null);
-			return result;
 		}
-    }
+	}
 }
+
