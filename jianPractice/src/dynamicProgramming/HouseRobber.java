@@ -25,8 +25,8 @@ public class HouseRobber {
 
             // current level
             i_2_yes = Math.max(i_yes,i_no)+num;
-            i_2_no = i_1_yes;
-
+            i_2_no = Math.max(i_1_yes,i_1_no);
+            
             // i -> i+1
             i_yes = i_1_yes;
             i_no = i_1_no;
