@@ -7,8 +7,8 @@ public class RemoveElement {
 
     public int removeElement(int[] nums, int val) {
 
-        // size is the slower pointer here that points
-        // to the index that's golden
+        // size is the slower pointer here,
+        // which that points to the index that's golden
         int size = 0;
         for(int i=0;i<nums.length;i++){
             if(nums[i] !=val){  // value to keep
