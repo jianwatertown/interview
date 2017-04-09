@@ -4,29 +4,31 @@ public class ReverseLinkedListTwo {
 
     public ListNode reverseBetween(ListNode head, int m, int n) {
 
+        // init and dummy head
         if(head==null||head.next==null||m>=n){return head;}
+        ListNode dummyHead= new ListNode(0);
+        dummyHead.next = head;
 
-        ListNode before = head;
-        ListNode end = head;
-        for(int i=1;i<n;i++){
+        // 1 - 2 - 3 - 4 (swapping 2, 3)
+        ListNode before = dummyHead;        // 1
+        ListNode end = dummyHead;           // 3
+
+        for(int i=1;i<=n;i++){
             if(i<m){
                 before = before.next;
             }
             end = end.next;
         }
-        ListNode remainStart = end.next;
-        ListNode swapStart = before.next;
-        ListNode newHead = reverseBetween(swapStart,end);
+        ListNode remainStart = end.next; // 4
 
-        // 1->2->[...]->3->4
-        swapStart.next = remainStart;
+        // reverse
+        ListNode newHead = reverseBetween(before.next,end);
 
-        // fix head if needed
-        if(m>1) {
-            before.next = newHead;
-            newHead = head;
-        }
-        return newHead;
+        // swapped + remain
+        before.next.next = remainStart;   // 2.next = 4
+        // begin + swapped
+        before.next = newHead;
+        return dummyHead.next;
     }
 
     // same as the algorithm in ReverseLinkedList
@@ -41,4 +43,14 @@ public class ReverseLinkedListTwo {
         return newHead;
     }
 
+
+    public static void main(String[] args){
+        ListNode one = new ListNode(1);
+        ListNode two = new ListNode(2);
+        ListNode three = new ListNode(3);
+//        ListNode five = new ListNode(5);
+        one.next = two;
+        two.next = three;
+        System.out.println(new ReverseLinkedListTwo().reverseBetween(one,2,3));
+    }
 }
