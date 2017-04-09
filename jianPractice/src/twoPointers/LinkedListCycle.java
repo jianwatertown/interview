@@ -1,6 +1,6 @@
 package twoPointers;
 
-import leetcode.dataStructures.ListNode;
+import linkedlist.ListNode;
 
 /**
  * Created by jianwang on 4/4/17.

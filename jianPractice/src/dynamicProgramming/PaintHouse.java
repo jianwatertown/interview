@@ -11,9 +11,6 @@ package dynamicProgramming;
 
  Note:
  All costs are positive integers.
-
-
- * Created by jianwang on 12/30/16.
  */
 public class PaintHouse {
 

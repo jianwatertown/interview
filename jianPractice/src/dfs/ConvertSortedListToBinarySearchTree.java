@@ -1,6 +1,6 @@
 package dfs;
 
-import leetcode.dataStructures.ListNode;
+import linkedlist.ListNode;
 import tree.TreeNode;
 
 /**
