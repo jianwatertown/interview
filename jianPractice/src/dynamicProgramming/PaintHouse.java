@@ -11,40 +11,23 @@ package dynamicProgramming;
 
  Note:
  All costs are positive integers.
-
-
- * Created by jianwang on 12/30/16.
  */
 public class PaintHouse {
 
     public int minCost(int[][] costs) {
+        if(costs==null||costs.length==0||costs[0].length==0){return 0;}
+        int count = costs.length;
+        int[][] sum = new int[costs.length][3];
+        sum[0] = new int[]{costs[0][0],costs[0][1],costs[0][2]};
 
-        HouseColorCost previousHouse = new HouseColorCost(0,0,0);
-
-        for(int houseIndex=0;houseIndex<costs.length;houseIndex++){
-            HouseColorCost newHouse = new HouseColorCost(0,0,0);
-            newHouse.r = Math.min(previousHouse.g,previousHouse.b) + costs[houseIndex][0];
-            newHouse.g = Math.min(previousHouse.r,previousHouse.b) + costs[houseIndex][1];
-            newHouse.b = Math.min(previousHouse.r,previousHouse.g) + costs[houseIndex][2];
-            previousHouse = newHouse;
-        }
-        return previousHouse.getMin();
-    }
-
-
-    public static class HouseColorCost{
-        public int r;
-        public int g;
-        public int b;
-
-        public int getMin(){
-            return Math.min(Math.min(r,g),b);
+        for(int i=1;i<sum.length;i++){
+            sum[i] = new int[]{
+                    Math.min(sum[i-1][1],sum[i-1][2])+costs[i][0],
+                    Math.min(sum[i-1][0],sum[i-1][2])+costs[i][1],
+                    Math.min(sum[i-1][0],sum[i-1][1])+costs[i][2]
+            };
         }
 
-        public HouseColorCost(int r,int g,int b){
-            this.r = r;
-            this.b = b;
-            this.g = g;
-        }
+        return Math.min(Math.min(sum[count-1][0],sum[count-1][1]),sum[count-1][2]);
     }
 }

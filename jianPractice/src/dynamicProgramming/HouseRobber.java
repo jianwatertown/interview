@@ -14,28 +14,21 @@ package dynamicProgramming;
  */
 public class HouseRobber {
     public int rob(int[] nums) {
-        int i_yes = 0;
-        int i_no = 0;
-        int i_1_yes = 0;
-        int i_1_no = 0;
-        int i_2_yes = 0;
-        int i_2_no = 0;
+        // with/without
+        int[] pre = new int[]{0,0};
+        int[] now = new int[2];
 
         for(int num:nums){
-
-            // current level
-            i_2_yes = Math.max(i_yes,i_no)+num;
-            i_2_no = i_1_yes;
-
-            // i -> i+1
-            i_yes = i_1_yes;
-            i_no = i_1_no;
-            // i+1 -> i+2
-            i_1_yes = i_2_yes;
-            i_1_no = i_2_no;
-
-
+            // yes
+            now[0] = pre[1] + num;
+            // no
+            now[1] = Math.max(pre[1],pre[0]);
+            pre = now.clone();
         }
-        return Math.max(i_2_yes,i_2_no);
+        return Math.max(now[0],now[1]);
+    }
+
+    public static void main(String[] args){
+        System.out.println(new HouseRobber().rob(new int[]{2,1}));
     }
 }
