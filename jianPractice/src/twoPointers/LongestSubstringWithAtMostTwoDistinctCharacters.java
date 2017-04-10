@@ -1,0 +1,16 @@
+package twoPointers;
+
+/**
+ * Created by jianwang on 4/10/17.
+ *
+ * Given a string, find the length of the longest substring T that contains at most 2 distinct characters.
+
+     For example, Given s = “eceba”,
+
+     T is "ece" which its length is 3.
+ */
+public class LongestSubstringWithAtMostTwoDistinctCharacters {
+    public int lengthOfLongestSubstringTwoDistinct(String s) {
+
+    }
+}
