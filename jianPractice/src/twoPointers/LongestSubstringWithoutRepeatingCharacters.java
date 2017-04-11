@@ -41,7 +41,6 @@ public class LongestSubstringWithoutRepeatingCharacters {
             }
             // 2. expand window
             else{
-
                 Character c = s.charAt(end);
                 int count = map.containsKey(c)?map.get(c):0;
                 if(count>0){isDupe=true;}
