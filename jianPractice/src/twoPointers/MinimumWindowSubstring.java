@@ -38,36 +38,40 @@ public class MinimumWindowSubstring {
 
         // 2. go through source string, stop with all matched
         int matchNeeded = t.length();
-        int begin = 0, end = 0, distance=Integer.MAX_VALUE;
+        int begin = 0, end = 0, distance=Integer.MAX_VALUE, head =-1;
 
         while(end<s.length()){
-            Character endChar = s.charAt(end);
-            Character beginChar = s.charAt(begin);
-
-            // a. expand window, move end, until valid
-            if(map.containsKey(endChar)){
-
-                int count = map.get(endChar);
-                if(count>0) {matchNeeded--;}
-
-                count--;end++;
-                map.put(endChar,count);
+            // a. enlarge the window, until all covered
+            if(matchNeeded>0){
+                Character endChar = s.charAt(end);
+                int count = map.containsKey(endChar)?map.get(endChar):0;
+                if(count>=1) {// was 1
+                    matchNeeded--;
+                }
+                map.put(endChar,count-1);
+                end++;
             }
             // b. shrink window, move begin, until no longer valid
-           while(matchNeeded==0 /*valid*/){
+            while(matchNeeded==0){
                 // update min window size
-                if(distance>(end-begin+1)) {distance = end-begin+1;}
+                if(distance>(end-begin)) {distance = end-begin;head=begin;}
 
-                if(map.containsKey(beginChar)){
-                    int count = map.get(beginChar);
-                    if(count==0){matchNeeded++; /*no longer valid*/}
-                    count++;begin++;
-                    map.put(beginChar,count);
-                }
+                Character beginChar = s.charAt(begin);
+                int count = map.get(beginChar);
+                if(count==0 /*previously all filled*/){matchNeeded++;}
+                map.put(beginChar,count+1);
+                begin++;
             }
         }
 
-        return matchNeeded==0?s.substring(begin,end+1):"";
+        return head>-1?s.substring(head,head+distance):"";
+    }
+
+    public static void main(String[] args){
+        MinimumWindowSubstring test = new MinimumWindowSubstring();
+        System.out.println(test.minWindow("aa","aa"));
+        System.out.println("a".substring(0,1));
+
     }
 }
 
