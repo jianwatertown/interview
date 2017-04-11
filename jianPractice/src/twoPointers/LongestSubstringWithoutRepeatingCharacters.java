@@ -1,6 +1,7 @@
 package twoPointers;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * the basic idea is, keep a hashmap which stores the characters in string as keys and their positions as values
@@ -23,41 +24,38 @@ import java.util.HashMap;
  */
 public class LongestSubstringWithoutRepeatingCharacters {
     public int lengthOfLongestSubstring(String s) {
-        if (s.length()==0) return 0;
-        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
-        int max=0;
-        for (int i=0, j=0; i<s.length(); ++i){
-            if (map.containsKey(s.charAt(i))){
-                j = Math.max(j,map.get(s.charAt(i))+1);
+        if(s.length()<=1) {return s.length();}
+        Map<Character,Integer> map = new HashMap<>();
+        int begin = 0,end = 0, max=1;
+        boolean isDupe = false;
+        while (end<s.length()){
+            // 1.shrink window when distinctCount>2
+            if(isDupe){
+                Character c = s.charAt(begin);
+                int count = map.get(c);
+                if(count==2){
+                    isDupe=false;
+                }
+                map.put(c,count-1);
+                begin++;
             }
-            map.put(s.charAt(i),i);
-            max = Math.max(max,i-j+1);
+            // 2. expand window
+            else{
+
+                Character c = s.charAt(end);
+                int count = map.containsKey(c)?map.get(c):0;
+                if(count>0){isDupe=true;}
+                if(!isDupe) {max = Math.max(max,end-begin+1);}
+                map.put(c,count+1);
+                end++;
+            }
         }
         return max;
     }
 
-    public int lengthOfLongestSubstring2(String s) {
-        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
-        int length = 0;
-        for(int begin=0,end=0;end<s.length();end++){
-            char c = s.charAt(end);
-            if (map.containsKey(c)){        // seen character before
-
-                // starting right of the character
-                // or keep its original place, which might have skipped
-                // c already
-                begin = Math.max(begin,map.get(c)+1);
-
-
-            }
-            map.put(c,end);
-            length = Math.max(length,end-begin+1);
-        }
-        return length;
-    }
     public static void main(String[] args){
         LongestSubstringWithoutRepeatingCharacters tester = new LongestSubstringWithoutRepeatingCharacters();
-        tester.lengthOfLongestSubstring2("abba");
+        tester.lengthOfLongestSubstring("abba");
 
     }
 }
