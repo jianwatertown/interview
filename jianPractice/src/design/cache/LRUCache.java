@@ -3,12 +3,20 @@ package design.cache;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/*
+* 		2 most important primitives are:
+* 		1) removeNode(Node n) removes any node
+* 				used in deleting when reaching max count
+	* 			used in updating existing node by removing then adding
+* 		2) addNodeToTheHead
+*
+* **/
 public class LRUCache {
     int capacity = 0;
     Map<Integer,CacheNode> lookup = new HashMap<>();
     CacheNode fakeHead = new CacheNode(null,null,0,0);
     CacheNode fakeTail = new CacheNode(null,null,0,0);
-    int size = 0;
 
     public LRUCache(int capacity) {
         this.capacity = capacity;
@@ -29,7 +37,7 @@ public class LRUCache {
     		addNodeToHead(cacheNode);
 
     		// 2. remove the tail
-    		if(size>capacity){
+    		if(lookup.size()>capacity){
     			removeNode(fakeTail.prev);
     		}
     	}
@@ -38,17 +46,20 @@ public class LRUCache {
     		// reset value if needed
     		CacheNode cacheNode = lookup.get(key);
     		cacheNode.value = value;
-    		moveNodeToHeadIfNeeded(cacheNode);
+			removeNode(lookup.get(key));
+			addNodeToHead(lookup.get(key));
     	}
     }
-    
-    public void moveNodeToHeadIfNeeded(CacheNode cacheNode){
-    	if(fakeHead.next!=cacheNode){
-        	removeNode(cacheNode);
-        	addNodeToHead(cacheNode);
-        }
-    }
-    
+
+	public int get(int key) {
+		if(!lookup.containsKey(key)){return -1;}
+		else{
+			removeNode(lookup.get(key));
+			addNodeToHead(lookup.get(key));
+			return lookup.get(key).value;
+		}
+	}
+
     public void removeNode(CacheNode cacheNode){
     	
     	if(cacheNode==fakeTail || cacheNode == fakeHead) {return;}
@@ -61,26 +72,15 @@ public class LRUCache {
 		oldPrev.next = oldNext;
 		oldNext.prev = oldPrev;
 		lookup.remove(cacheNode.key);
-		size--;
     }
     
     public void addNodeToHead(CacheNode cacheNode){
+    	if(fakeHead.next==cacheNode) {return;}
 		CacheNode oldHead = fakeHead.next;
 		cacheNode.next = oldHead;
 		oldHead.prev = cacheNode;
 		fakeHead.next = cacheNode;
 		lookup.put(cacheNode.key, cacheNode);
-		size++;
-    }
-
-	public int get(int key) {
-        if(!lookup.containsKey(key)){
-        	return -1;
-        }
-        else{
-        	moveNodeToHeadIfNeeded(lookup.get(key));
-        	return lookup.get(key).value;
-        }
     }
 
     public class CacheNode{
