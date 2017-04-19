@@ -5,7 +5,7 @@ package dynamicProgramming;
  */
 public class MaximalSquare {
 
-    public int maximalSquare(char[][] matrix) {¬
-
+    public int maximalSquare(char[][] matrix) {
+        return 0;
     }
 }
