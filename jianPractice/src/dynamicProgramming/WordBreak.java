@@ -40,7 +40,7 @@ public class WordBreak {
 
 
 	// 2017.1 practise
-	public boolean wordBreak(String s, List<String> wordDict) {
+	public boolean wordBreakRecursion(String s, List<String> wordDict) {
 		Set<String> wordSet = new HashSet<>(wordDict);
 		return wordBreak(s, wordSet, new int[s.length()], 0)==1;
 	}
@@ -62,5 +62,21 @@ public class WordBreak {
 		}
 		breakable[start] = -1;
 		return -1;
+	}
+
+
+	// iterative, 4.18
+	public boolean wordBreak(String s, List<String> wordDict) {
+		if(s==null||s.length()==0) {return false;}
+		boolean[] breakable = new boolean[s.length()];
+		Arrays.fill(breakable,false);
+		for(int i=0;i<s.length();i++){
+			for(int j=0;j<=i;j++){
+				breakable[i] = (j>0?breakable[j-1]:true /*previous always breakable*/) &&
+								wordDict.contains(s.substring(j,i+1));
+				if(breakable[i]) {break;}
+			}
+		}
+		return breakable[s.length()-1];
 	}
 }

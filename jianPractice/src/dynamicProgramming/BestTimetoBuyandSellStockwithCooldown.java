@@ -10,7 +10,7 @@ import java.util.Arrays;
     block[i]: I dont have stock and I cannot buy. (after a recent sell)
     empty[i]: I dont have stock and I am ready to buy.
 
-        transictions
+        transitions
 
     hold[i] = max(hold[i-1],empty[i-1]-prices[i]);
     block[i] = hold[i-1]+prices[i]
