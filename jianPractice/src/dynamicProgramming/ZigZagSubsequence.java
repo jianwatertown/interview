@@ -2,10 +2,12 @@ package dynamicProgramming;
 
 /**
  * Created by jianwang on 4/15/17.
+ *
+     * The longest Zig-Zag subsequence problem is to find length of the longest subsequence
+     * of given sequence such that all elements of this are alternating.
  */
 public class ZigZagSubsequence {
     int longestZigZag(int[] sequence){
-        int len = sequence.length;
         int pSize = 0;
         int nSize = 0;
         int p = Integer.MAX_VALUE;      // last digit of the sequence whose diff is +
