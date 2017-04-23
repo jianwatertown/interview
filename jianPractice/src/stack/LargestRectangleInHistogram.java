@@ -15,9 +15,6 @@ public class LargestRectangleInHistogram {
 
 			int height = (index==heights.length)?-1:heights[index]; // put -1 dummy index to pop everything in the stack
 
-			if(index==4){
-				System.out.println("hi");
-			}
 			// 1. if height is higher, put into the stack
 			if(stack.isEmpty()||height>=heights[stack.peek()]){
 				stack.push(index++);
