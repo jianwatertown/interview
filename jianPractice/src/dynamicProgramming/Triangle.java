@@ -8,7 +8,8 @@ import java.util.List;
  */
 public class Triangle {
 
-    public int minimumTotal(List<List<Integer>> triangle) {
+    // 2 passes
+    public int minimumTotalLeetCode(List<List<Integer>> triangle) {
 
         if(triangle.size()==1) {return triangle.get(0).get(0);}
 
@@ -31,6 +32,27 @@ public class Triangle {
         }
         return result[0];
     }
+
+
+    // one path from top to bottom
+    // 4.22.2017 practise
+    public int minimumTotal(List<List<Integer>> triangle) {
+        if(triangle==null||triangle.size()==0) {return 0;}
+        int[] path = new int[triangle.size()];
+        path[0] = triangle.get(0).get(0);
+        int result = path[0];
+
+        for(int row=1;row<triangle.size();row++){
+            result = Integer.MAX_VALUE;
+            for(int i=row;i>=0;i--){
+                path[i] = Math.min((i==row)?Integer.MAX_VALUE:path[i],(i==0)?Integer.MAX_VALUE:path[i-1]);
+                path[i]+=triangle.get(row).get(i);
+                result = Math.min(path[i],result);
+            }
+        }
+        return result;
+    }
+
 
     public static void main(String[] args){
         Triangle t = new Triangle();

@@ -19,7 +19,9 @@ public class WordBreak {
     	Arrays.fill(cache, 0);
     	return wordBreak(s,0,wordDict,cache);
     }
-    
+
+
+    // template
     public boolean wordBreak(String s, int head, Set<String> wordDict, int[] cache){
     	
     	if(head>=s.length()) {return true;}
