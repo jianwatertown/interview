@@ -22,6 +22,7 @@ public class CoinChange {
 	// needs to  rename to "coinChange" to run
 	// iterative approach goes from left to right, so that each slot has more than 1 chances
     public int coinChangeBottomUpIterative (int[] coins, int n) {
+
     	if(n<=0) return 0;
     	
     	// 1.init
@@ -32,10 +33,7 @@ public class CoinChange {
     	// 2. for all reachable ones
     	for(int i=0;i<n;i++){
     		// cannot reach here
-    		if(coinsNeeded[i]==-1){
-    			continue;
-    		}
-    		else{
+    		if(coinsNeeded[i]!=-1){
     			// 3. move to the next coin place
     			for(int coin:coins){
     				if(i+coin<=n && i<Integer.MAX_VALUE-coin){			// coin + previous value is within boundary
@@ -77,9 +75,26 @@ public class CoinChange {
     	return minCoin;
     }
 
+	// 4.26 practise
+    public int coinChangeBottomUp(int[] coins, int n){
+    	if(n==0) {return 0;}
+    	if(coins==null||coins.length==0) {return -1;}
+    	int[] min = new int[n+1];
+    	Arrays.fill(min,Integer.MAX_VALUE);
+    	min[0] = 0;
+    	for(int i=1;i<=n;i++){
+    		for(int coin:coins){
+    			int remain = i - coin;
+    			if(remain>=0){
+					min[i] = Math.min(min[remain],min[i]-1)+1;
+				}
+			}
+		}
+		return min[n]==Integer.MAX_VALUE?-1:min[n];
+	}
     
     public static void main (String[] args) {
     	CoinChange change = new CoinChange();
-    	System.out.println(change.coinChangeBottomUpIterative( new int[] {1},1));
+    	System.out.println(change.coinChangeBottomUp( new int[] {1},2));
     }
 }
