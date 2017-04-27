@@ -28,7 +28,7 @@ public class IntegerBreak {
         max[1] = 1;
 
         for(int i=0;i<=n;i++){
-            // move from right to left
+            // move from left to right
             // either j*(i-j) or j*max[i-j]
             for(int j=i-1;j>=1;j--){
                 max[i] = Math.max(max[i],
