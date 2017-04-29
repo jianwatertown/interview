@@ -1,6 +1,9 @@
 package dynamicProgramming;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * '
  * ?' Matches any single character.
@@ -21,18 +24,39 @@ package dynamicProgramming;
      isMatch("aab", "c*a*b") → false
  */
 public class WildCardMatching {
+
     public boolean isMatch(String s, String p) {
-        boolean[][] match=new boolean[s.length()+1][p.length()+1];
+
+        // defaults are False "pattern*source"
+        // index(i,j) value are saved in match[i+1][j+1]
+        boolean[][] match=new boolean[p.length()+1][s.length()+1];
+
+        // "","" matches; "" matches to nothing else
         match[0][0] = true;
 
-        for(int i=1;i<=p.length();i++){
-            for(int j=1;i<=s.length();j++){
-                match[][]
-
+        // first column, only extend when pattern is *
+        for(int i=0;i<p.length();i++){
+            if(match[i][0] && p.charAt(i)=='*' /*used as empty here*/){
+                match[i+1][0] = true;
             }
+            else{break;}
         }
 
-        return match[s.length()][p.length()];
+        for(int i=0;i<p.length();i++){
+            boolean rowContainsTrue = match[i][0];
+            for(int j=0;j<s.length();j++){
+                if(p.charAt(i)==s.charAt(j)||p.charAt(i)=='?'){
+                    match[i+1][j+1] = match[i][j];
+                }
+                else if(p.charAt(i)=='*'){
+                    match[i+1][j+1] = match[i][j]   // ab,c* -> a,c (up,left)
+                            || match[i][j+1]        // ab,c* -> ab,c (up)
+                            || match[i+1][j];       // ab,c* -> a,c* (left)
+                }
+                rowContainsTrue = rowContainsTrue||match[i+1][j+1];
+            }
+            if(!rowContainsTrue){return false;}
+        }
+        return match[p.length()][s.length()];
     }
-
 }

@@ -53,7 +53,7 @@ public class InterleavingString {
 
 
     // DP
-    // Draw the diagram then you will understand
+    // Draw the diagram then you will understand, the grid strictly defined the path
     public boolean isInterleaveDP(String s1, String s2, String s3) {
 
         if(s1.length()+s2.length()!=s3.length()) { return false;}
