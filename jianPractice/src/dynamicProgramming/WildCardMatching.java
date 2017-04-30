@@ -1,9 +1,5 @@
 package dynamicProgramming;
 
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
 /**
  * '
  * ?' Matches any single character.
@@ -50,7 +46,7 @@ public class WildCardMatching {
                 }
                 else if(p.charAt(i)=='*'){
                     match[i+1][j+1] = match[i][j]   // ab,c* -> a,c (up,left)
-                            || match[i][j+1]        // ab,c* -> ab,c (up)
+                            || match[i][j+1]        // ab,c* -> ab,c (up) match empty case
                             || match[i+1][j];       // ab,c* -> a,c* (left)
                 }
                 rowContainsTrue = rowContainsTrue||match[i+1][j+1];
