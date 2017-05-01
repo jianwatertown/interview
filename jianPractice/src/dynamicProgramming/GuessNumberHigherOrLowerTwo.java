@@ -53,6 +53,7 @@ public class GuessNumberHigherOrLowerTwo {
 
         // 3. get i, j from previous
         // it's critical to use j as the outer loop: from j first, so that i<=j
+        // from i....to j
         for(int j=2;j<=n;j++){
 
             // 4. important edge case

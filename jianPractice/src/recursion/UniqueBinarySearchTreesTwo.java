@@ -8,6 +8,12 @@ import java.util.List;
 
 /**
  * Created by jianwang on 4/29/17.
+ *
+ * Given an integer n, generate all structurally unique BST's (binary search trees)
+ *  that store values 1...n.
+
+     For example,
+     Given n = 3, your program should return all 5 unique BST's shown below.
  */
 public class UniqueBinarySearchTreesTwo {
 
@@ -56,7 +62,7 @@ public class UniqueBinarySearchTreesTwo {
                     for (TreeNode nodeR : result[len - j - 1]) {
                         TreeNode node = new TreeNode(j + 1);
                         node.left = nodeL;
-                        node.right = clone(nodeR, j + 1);
+                        node.right = createNodeWithOffset(nodeR, j + 1);
                         result[len].add(node);
                     }
                 }
@@ -65,13 +71,13 @@ public class UniqueBinarySearchTreesTwo {
         return result[n];
     }
 
-    private static TreeNode clone(TreeNode n, int offset) {
+    private static TreeNode createNodeWithOffset(TreeNode n, int offset) {
         if (n == null) {
             return null;
         }
         TreeNode node = new TreeNode(n.val + offset);
-        node.left = clone(n.left, offset);
-        node.right = clone(n.right, offset);
+        node.left = createNodeWithOffset(n.left, offset);
+        node.right = createNodeWithOffset(n.right, offset);
         return node;
     }
 }
