@@ -26,7 +26,7 @@ package sortAndSearch;
  int guess(int num);
 
  */
-public class GuessNumberLowerOrHigher {
+public class GuessNumberHigherOrLower {
 
     public int guessNumber(int n) {
         int s = 1;

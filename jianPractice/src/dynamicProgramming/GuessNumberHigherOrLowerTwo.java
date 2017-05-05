@@ -46,7 +46,7 @@ public class GuessNumberHigherOrLowerTwo {
         // 1. edge
         if(n<=1) {return 0;}
 
-        // 2. problem(n) -> problem(1,n) -> generlize problem(i,j) when i=1 and j=n
+        // 2. problem(n) -> problem(1,n) -> generalize problem(i,j) when i=1 and j=n
         // dp[i][j] get money between i and j
         // n+1 to be easier for index computation
         int[][] dp = new int[n+1][n+1];
@@ -68,8 +68,6 @@ public class GuessNumberHigherOrLowerTwo {
                     dp[i][j] = Math.min(
                             k + Math.max(/*i to k-1 */(k-1>=i?dp[i][k-1]:0),/*k+1 to j*/(k+1<=j?dp[k+1][j]:0)),
                             dp[i][j]);
-
-
                 }
             }
         }

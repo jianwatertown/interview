@@ -59,6 +59,7 @@ public class UniqueBinarySearchTreesTwo {
             result[len] = new ArrayList<TreeNode>();
             for (int j = 0; j < len; j++) {
                 for (TreeNode nodeL : result[j]) {
+                    // each nodeR needs to be shifted
                     for (TreeNode nodeR : result[len - j - 1]) {
                         TreeNode node = new TreeNode(j + 1);
                         node.left = nodeL;
