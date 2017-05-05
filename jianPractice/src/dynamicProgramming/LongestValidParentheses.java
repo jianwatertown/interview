@@ -28,7 +28,9 @@ public class LongestValidParentheses {
      * @param s
      * @return
      */
-//    int longestValidParentheses(string s) {
+// C++ code below:
+//
+//    int longestValidParenthesesStack(string s) {
 //        int n = s.length(), longest = 0;
 //        stack<int> st;
 //        for (int i = 0; i < n; i++) {
@@ -69,7 +71,8 @@ public class LongestValidParentheses {
 
      To void index out of bound, the indexing is little bit tricky. Hope the code looks intuitive with the explanations above.
      */
-    public int longestValidParenthesesDP(String s) {
+    // DP
+    public int longestValidParentheses(String s) {
         int[] dp = new int[s.length() + 1];
         char[] array = s.toCharArray();
         int max = 0;
