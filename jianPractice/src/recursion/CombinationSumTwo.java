@@ -36,7 +36,9 @@ public class CombinationSumTwo {
         if(remain<0)    {return;}
         else if(remain==0)  {result.add(new ArrayList<>(soFar));}
         else{
-            for(int i=start;i<candidates.length;i++){
+            for(int i=start;i<candidates.length ;i++){
+                // skip 1,1,2,3
+                if(i>start&&candidates[i-1]==candidates[i]){continue;}
                 soFar.add(candidates[i]);
                 backtrack(result,soFar,candidates,remain-candidates[i],i+1);
                 soFar.remove(soFar.size()-1);
