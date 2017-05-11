@@ -33,7 +33,7 @@ public class GuessNumberHigherOrLower {
         int e = n;
         while(s<=e){
 
-            // watch, if you use (s+e)/2 will give you out of boudnary problem
+            // watch, if you use (s+e)/2 will give you out of boundary problem
             int mid = s+(e-s)/2;
 
             int answer = guess(mid);

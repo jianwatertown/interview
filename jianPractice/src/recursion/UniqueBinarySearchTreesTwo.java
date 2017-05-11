@@ -31,6 +31,7 @@ public class UniqueBinarySearchTreesTwo {
             return res;
         }
 
+        // use i as root
         for (int i = s; i <= e; ++i) {
             List<TreeNode> leftSubtrees = generateSubtrees(s, i - 1);
             List<TreeNode> rightSubtrees = generateSubtrees(i + 1, e);
@@ -48,28 +49,32 @@ public class UniqueBinarySearchTreesTwo {
     }
 
     public static List<TreeNode> generateTreesDP(int n) {
-        List<TreeNode>[] result = new List[n + 1];
-        result[0] = new ArrayList<TreeNode>();
+        List<TreeNode>[] dp = new List[n + 1];
+        dp[0] = new ArrayList<TreeNode>();
         if (n == 0) {
-            return result[0];
+            return dp[0];
         }
 
-        result[0].add(null);
+        dp[0].add(null);
+
+        // left to right DP
         for (int len = 1; len <= n; len++) {
-            result[len] = new ArrayList<TreeNode>();
+            dp[len] = new ArrayList<TreeNode>();
+
+            // use previous trees
             for (int j = 0; j < len; j++) {
-                for (TreeNode nodeL : result[j]) {
+                for (TreeNode nodeL : dp[j]) {
                     // each nodeR needs to be shifted
-                    for (TreeNode nodeR : result[len - j - 1]) {
+                    for (TreeNode nodeR : dp[len - j - 1]) {
                         TreeNode node = new TreeNode(j + 1);
                         node.left = nodeL;
                         node.right = createNodeWithOffset(nodeR, j + 1);
-                        result[len].add(node);
+                        dp[len].add(node);
                     }
                 }
             }
         }
-        return result[n];
+        return dp[n];
     }
 
     private static TreeNode createNodeWithOffset(TreeNode n, int offset) {

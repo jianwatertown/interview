@@ -3,7 +3,6 @@ package sortAndSearch;
 import linkedlist.ListNode;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.PriorityQueue;
 
 /**
@@ -28,10 +27,12 @@ public class MergeKSortedLists {
         ListNode dummy = new ListNode(0);
         ListNode tail=dummy;
 
+        // Queue to have K elements
         for (ListNode node:lists)
             if (node!=null)
                 queue.add(node);
 
+        // when any Node is dequeued, put Node's next in
         while (!queue.isEmpty()){
             tail.next=queue.poll();
             tail=tail.next;
