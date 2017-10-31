@@ -45,9 +45,10 @@ public class WildCardMatching {
                     match[i+1][j+1] = match[i][j];
                 }
                 else if(p.charAt(i)=='*'){
-                    match[i+1][j+1] = match[i][j]   // ab,c* -> a,c (up,left) new character for both, might be a *, ? or same character
-                            || match[i][j+1]        // ab,c* -> ab,c (up) no more character from source is needed, must be a *
-                            || match[i+1][j];       // ab,c* -> a,c* (left) no more character from pattern is needed, must be a *
+                    match[i+1][j+1] =
+                            match[i][j]             // (up,left) * becomes up character
+                            || match[i][j+1]        // (up) * becomes "" (empty)
+                            || match[i+1][j];       // (left) * can be expand to anything, so if the left matches, this matches
                 }
                 rowContainsTrue = rowContainsTrue||match[i+1][j+1];
             }
