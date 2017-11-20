@@ -18,14 +18,14 @@ package dynamicProgramming;
      (2, 2)
      (3, 1)
 
-     Note that different sequences are counted as different combinations.
+     *** Note that different sequences are counted as different combinations. ***
 
      Therefore the output is 7.
-     Follow up:
-     What if negative numbers are allowed in the given array?
-     How does it change the problem?
-     What limitation we need to add to the question to allow negative numbers?
 
+     Follow up:
+        What if negative numbers are allowed in the given array?
+         How does it change the problem?
+        What limitation we need to add to the question to allow negative numbers?
 
  */
 public class CombinationSumFour {
