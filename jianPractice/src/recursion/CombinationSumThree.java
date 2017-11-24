@@ -56,7 +56,7 @@ public class CombinationSumThree {
     }
 
 
-    public List<List<Integer>> combinationSum3Jian(int k, int n) {
+    public List<List<Integer>> combinationSum3JPractice1(int k, int n) {
 
         if(k==0||n<1) {return new LinkedList<>();}
 
@@ -88,5 +88,24 @@ public class CombinationSumThree {
             if(oneResult.size()==k) {result.add(new ArrayList<>(oneResult));}
         }
         return result;
+    }
+
+
+    public List<List<Integer>> combinationSum3JPractice2(int k, int n) {
+        List<List<Integer>> result = new ArrayList<>();
+        addToResult(result,new ArrayList<>(),1,k,n);
+        return result;
+    }
+
+    public void addToResult(List<List<Integer>> result, List<Integer> soFar, int start, final int k, final int n){
+
+        if(n<0 /*out of bound of target*/ || start>k /*exceeds count*/) {return;}
+        if(n==0/*just right*/) {result.add(new ArrayList<>(soFar));}
+
+        for(int i=start;i<9;i++){
+            soFar.add(start);
+            addToResult(result,soFar,start+1,k,n-start);
+            soFar.remove(soFar.size()-1);   // soFar.remove(start);
+        }
     }
 }

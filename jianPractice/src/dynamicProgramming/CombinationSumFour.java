@@ -44,6 +44,21 @@ public class CombinationSumFour {
         }
         return result[target];
     }
+
+
+    public int combinationSum4Practise1(int[] nums, int target) {
+
+        if(target<=0) {return 0;}
+
+        int[] result = new int[target+1];
+
+        for(int i=0 /*from nothing*/;i<=target;i++){
+            for(int num:nums){
+                result[i] += (i-num>0)? /*in range*/ result[i-num]: 0;
+            }
+        }
+        return result[target];
+    }
 }
 
 
