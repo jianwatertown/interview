@@ -50,4 +50,24 @@ public class Permutations {
             }
         }
     }
+
+
+    // ************************************************************************************
+    // practise 10/09/2017
+    // ************************************************************************************
+
+    public List<List<Integer>> permutePractice(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        backtrackPractise(result,new ArrayList<>(),nums,0);
+        return result;
+    }
+
+    public void backtrackPractise(List<List<Integer>> result, List<Integer> soFar, int[]nums, int currentIndex){
+        if(currentIndex==nums.length) {result.add(new LinkedList<>(soFar));  return;}
+        for(int i=0;i<=soFar.size();i++){
+            soFar.add(i,nums[currentIndex]);
+            backtrack(result,soFar,nums,currentIndex+1);
+            soFar.remove(i);
+        }
+    }
 }
