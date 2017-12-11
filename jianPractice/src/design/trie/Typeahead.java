@@ -3,13 +3,13 @@ package design.trie;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
  * Implement typeahead. Given a string and a dictionary, return all words that contains the string as a substring. 
  * 
- * The dictionary will give at the initialize method and wont be changed. The method to find all words with given substring would be called multiple times.
+ * The dictionary will give at the initialize method and wont be changed. The method to find all words with given
+ * substring would be called multiple times.
  * 
  * Given dictionary = {"Jason Zhang", "James Yu", "Bob Zhang", "Larry Shi"}
 

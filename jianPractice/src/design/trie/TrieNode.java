@@ -6,6 +6,9 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 
 public class TrieNode {
+
+    // Note the value for the node does not need to stay in this tree
+
 	public NavigableMap<Character, TrieNode> children;
     public List<Integer> top10;
     boolean endHere = false;

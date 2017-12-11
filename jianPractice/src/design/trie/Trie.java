@@ -12,20 +12,19 @@ import java.util.NavigableMap;
  * trie.search("lint"); will return false
  * trie.startsWith("lint"); will return true
  */
-//insert("lintcode")
-//search("code") // return false
-//startsWith("lint") // return true
-//startsWith("linterror") // return false
-//insert("linterror")
-//search("lintcode) // return true
-//startsWith("linterror") // return true
-
+	//insert("lintcode")
+	//search("code") // return false
+	//startsWith("lint") // return true
+	//startsWith("linterror") // return false
+	//insert("linterror")
+	//search("lintcode) // return true
+	//startsWith("linterror") // return true
 
 /**
  * 
  * 
  * 	Big note on function(++i) vs function(i++)
- * 	THe latter calls function first before doing stuff
+ * 	THe latter calls function first before  doing stuff
  * 
  * @author jian.wang
  *
