@@ -39,14 +39,18 @@ public class CombinationSumThree {
     }
 
 
+    // only 3 branches
     public void backtrack(List<List<Integer>> result, List<Integer> soFar, int k, int start, int remain){
 
+        // 1. branch 1, negative
         if(start>10||soFar.size()>k || remain<0) {return;}
 
+        // 2. branch 2, 0
         if(soFar.size()==k && remain==0){
             result.add(new ArrayList<>(soFar)); return;
         }
 
+        // 3. branch 3, positive
         // "soFar" uses J or not use J
         for(int j=start;j<=9;j++){
             soFar.add(j);
