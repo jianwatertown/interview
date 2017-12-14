@@ -38,12 +38,13 @@ public class LongestPalindromicSubstring {
         }
         // 2. size grows to length
         for(int size=2;size<l;size++){
-            for(int j=0;j+size<l /*until max index*/;j++){
-                // for [j...j+i], check [j+1][j+j-1]
-                if((matrix[j+1][j+size-1]==1) && (s.charAt(j)==s.charAt(j+size))){
-                    matrix[j][j+size] = 1;
-                    System.out.println(s.substring(j,j+size+1));
-                    maxString = maxString.length()<size+1?s.substring(j,j+size+1):maxString;
+            for(int i=0;i+size<l /*until max index*/;i++){
+                // check substring(i,i+size): i,i+1,.....,i+size-1,i+size
+                if((matrix[i+1][i+size-1]>0)            // make sure [i+1,i+size-1]  is palindrom
+                && (s.charAt(i)==s.charAt(i+size))){    // make sure s(i)==s(i+size)
+                    matrix[i][i+size] = 1;
+                    System.out.println(s.substring(i,i+size+1));
+                    maxString = maxString.length()<size+1?s.substring(i,i+size+1):maxString;
                 }
             }
         }

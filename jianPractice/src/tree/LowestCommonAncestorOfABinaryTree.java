@@ -1,6 +1,6 @@
 package tree;
 
-public class LowestCommonAncestor {
+public class LowestCommonAncestorOfABinaryTree {
 
 	// works
 	public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
@@ -56,7 +56,7 @@ public class LowestCommonAncestor {
 		TreeNode n3 = new TreeNode(3);
 		n1.left = n2;
 		n1.right = n3;
-		LowestCommonAncestor a = new LowestCommonAncestor();
+		LowestCommonAncestorOfABinaryTree a = new LowestCommonAncestorOfABinaryTree();
 		TreeNode n = a.lowestCommonAncestor(n1, n2, n3);
 		System.out.println(n!=null?n.val:"null");
 	}
