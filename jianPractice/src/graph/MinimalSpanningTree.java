@@ -37,6 +37,7 @@ public class MinimalSpanningTree {
     //
     // 3. keep doing 2 until count==1
 
+    // "union-find", root method == find method
 
     static Comparator<CostEdge> comp = new Comparator<CostEdge>() {
         public int compare(CostEdge a, CostEdge b) {
@@ -87,6 +88,7 @@ public class MinimalSpanningTree {
     }
 
     // classic root
+    // with path compression
     int root(int lookup, int[] id){
         // until "your id == yourself"
         // that's the root
@@ -96,6 +98,13 @@ public class MinimalSpanningTree {
         }
         return lookup;
     }
+
+    /*
+    while(n.root.root!=n.root){
+        n.root=n.root.root;
+        n = n.root;
+    }
+    * */
 
     // wrong code
     // ids[a] = commonRoot;
