@@ -10,41 +10,24 @@ import java.util.Queue;
  */
 public class BinaryTreeLevelOrderTraversalTwo {
 
-    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+    public List<List<Integer>> levelOrderBottom2(TreeNode root) {
 
         // set up
         List<List<Integer>> result = new ArrayList<List<Integer>>();
         Queue<TreeNode> q = new LinkedList<>();
         if(root==null) {return result;}
-
-        int currentLevelMax = 1;
-        int nextLevelMax = 0;
         q.add(root);
-        List<Integer> onLevel = new LinkedList<>();
 
         while(!q.isEmpty()){
-
-            // 1. add to current level
-            TreeNode n = q.poll();
-            onLevel.add(n.val);
-
-            // 2. handle children
-            if(n.left!=null){
-                q.add(n.left);
-                nextLevelMax ++;
+            List<Integer> oneLevel = new ArrayList<>();
+            int nextLevelSize = q.size();
+            for(int i=0;i<nextLevelSize;i++){
+                TreeNode n = q.poll();
+                oneLevel.add(n.val);
+                if(n.left!=null) {q.add(n.left);}
+                if(n.right!=null) {q.add(n.right);}
             }
-            if(n.right!=null){
-                q.add(n.right);
-                nextLevelMax ++;
-            }
-
-            // 3. finish one level
-            if(onLevel.size()==currentLevelMax){
-                result.add(0,onLevel);
-                onLevel = new LinkedList<>();
-                currentLevelMax = nextLevelMax;
-                nextLevelMax = 0;
-            }
+            result.add(0,oneLevel);
         }
         return result;
     }

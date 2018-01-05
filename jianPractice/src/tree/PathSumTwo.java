@@ -10,11 +10,26 @@ public class PathSumTwo {
     public List<List<Integer>> pathSum(TreeNode root, int sum) {
         List<List<Integer>> result = new ArrayList<List<Integer>>();
         List<Integer> pathSoFar = new ArrayList<Integer>();
-        addToList(result, root, sum, 0, pathSoFar);
+        addToList2(result, root, sum, pathSoFar);
         return result;
     }
-    
-    
+
+	public void addToList2(List<List<Integer>> result, TreeNode root, int sum, List<Integer> pathSoFar){
+
+		if(root==null) {return;}
+		sum = sum-root.val;
+		pathSoFar.add(root.val);
+
+		// 1. leaf node
+		if(root.left==null && root.right==null && sum==0){
+			result.add(pathSoFar);
+		}
+
+		// 2. in-node
+		addToList2(result,root.left,sum,new ArrayList<Integer>(pathSoFar));
+		addToList2(result,root.right,sum,new ArrayList<Integer>(pathSoFar));
+	}
+
     public void addToList(List<List<Integer>> result, TreeNode root, int target, int sumsofar, List<Integer> pathSoFar){
 
     	if(root==null) {return;}
