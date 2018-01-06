@@ -1,8 +1,5 @@
 package bfs;
 
-
-import bfs.TreeNode;
-
 import java.util.*;
 
 
@@ -45,13 +42,32 @@ import java.util.*;
 
 public class GraphValidTree {
 
-	// ------------------------------------------------------------------
-	// DFS
-	// 			Notices
-	// 				1) DFS needs to pass the "parent node" down
-	// 				2) be careful of non-connected components
-	//
+	// Union find simple
+	public boolean validTreeSimple(int n, int[][] edges) {
+		int[] parent = new int[n];
+		for(int i=0;i<n;i++){parent[i] = i;}
 
+		for(int[] edge: edges){
+			if(find2(edge[0],parent)==find2(edge[1],parent)) {return false;}
+			union2(edge[0],edge[1],parent);
+		}
+		int firstRoot = find2(0,parent);
+		for(int i=0;i<n;i++){if(find2(i,parent)!=firstRoot) {return false;}}
+		return true;
+	}
+
+	public void union2(int a, int b, int[] parent){
+		parent[find2(a,parent)]=parent[find2(b,parent)];
+	}
+
+	public int find2(int lookup,int[] parent){
+		while(parent[lookup]!=lookup){lookup = parent[lookup];}
+		return parent[lookup];
+	}
+
+	// ------------------------------------------------------------------
+	// Union Find + path compression and mini-weight
+	// ------------------------------------------------------------------
 	public boolean validTreeUnionFind(int n, int[][] edges) {
 		int[] id = new int[n];      //  id points to the root of your set
 		int[] ht = new int[n];      //  height for each component
@@ -65,9 +81,7 @@ public class GraphValidTree {
 		// 3. for each edge, union the two nodes into 1
 		for(int[] edge: edges){
 			// 3. if two components were connected then fail
-			if(find(edge[0],edge[1],id)){
-				return false;
-			}
+			if(find(edge[0],edge[1],id)){return false;}
 			union(edge[0],edge[1],id,ht);
 		}
 
@@ -78,7 +92,7 @@ public class GraphValidTree {
 		return treeRoots.size()==1;
 	}
 
-	// union to compoenets, with mini-height
+	// union to components, with mini-height
 	public void union(int x, int y, int[] id, int[] ht){
 
 		// get the roots
@@ -118,7 +132,7 @@ public class GraphValidTree {
 	public boolean validTreeDFS(int n, int[][] edges) {
 
 		// 1. construct tree
-		Map<Integer, TreeNode>  treeMap = constructTreeMap(n,edges);
+		Map<Integer, TreeNode>  treeMap = constructEdgeMap(n,edges);
 
 
 		// 2. edge cases
@@ -150,25 +164,6 @@ public class GraphValidTree {
 		}
 	}
 
-	public Map<Integer, TreeNode> constructTreeMap(int n, int[][] edges){
-		Map<Integer, TreeNode>  treeMap = new HashMap<>();
-		for(int[] edge:edges){
-			TreeNode from = getNodeInMap(treeMap,edge[0]);
-			TreeNode to = getNodeInMap(treeMap,edge[1]);
-			from.children.add(to);
-			to.children.add(from);
-		}
-		return treeMap;
-	}
-
-	public TreeNode getNodeInMap(Map<Integer,TreeNode> map, int value){
-		if(!map.containsKey(value)){
-			TreeNode n = new TreeNode(value,new HashSet<>());
-			map.put(value,n);
-		}
-		return map.get(value);
-	}
-
 	public static class TreeNode{
 		public int value;
 		public Set<TreeNode> children = new HashSet<>();
@@ -180,48 +175,44 @@ public class GraphValidTree {
 
 	// ------------------------------------------------------------------
 	// 	BFS
-	//		1. knowing the parent
-	//		2. always put into visited before enqueuing
 	// ------------------------------------------------------------------
-	public boolean validTreeBFS(int n, int[][] edges) {
+	public Map<Integer, Set<Integer>> constructEdgeMap(int n, int[][] edges){
+		Map<Integer, Set<Integer>>  edgeMap = new HashMap<>();
+		for(int i=0;i<n;i++) { edgeMap.put(i,new HashSet<>());}
+
+		for(int[] edge:edges){
+			int from = edge[0];
+			int to = edge[1];
+			edgeMap.get(from).add(to);
+			edgeMap.get(to).add(from);
+		}
+		return edgeMap;
+	}
+
+	public boolean validTree2(int n, int[][] edges) {
+
+		if(n==0 || edges.length!=n-1){ return false;}
 
 		// 1. construct tree
-		Map<Integer, TreeNode>  treeMap = constructTreeMap(n,edges);
-		Map<TreeNode,TreeNode> parentMap = new HashMap<>();
+		Map<Integer, Set<Integer>> edgeMap = constructEdgeMap(n,edges);
 
-		// 2. edge cases
-		if(edges.length==0){
-			return n==1;
-		}
-
-		// 3. bfs
-		Queue<TreeNode> q = new LinkedList<>();
-		q.add(treeMap.get(edges[0][0]));
-		parentMap.put(treeMap.get(edges[0][0]),null /*fake tree head*/);
-		Set<TreeNode> visited = new HashSet<>();
-		visited.add(treeMap.get(edges[0][0]));
+		// 2. bfs
+		Queue<Integer> q = new LinkedList<>();
+		q.add(0);
+		Set<Integer> visited = new HashSet<>();
+		visited.add(0);
 
 		while(!q.isEmpty()){
-			TreeNode parent = q.poll();
+			Integer visitedNode = q.poll();
 
-			// for all the next nevel
-			for(TreeNode child: parent.children){
-
-				// make sure "child -> parent -> child" is not used
-				if(parentMap.get(parent)!=child){
-					// cycle
-					if(visited.contains(child)){
-						return false;
-					}
-					else{
-						visited.add(child);
-						q.add(child);
-						parentMap.put(child,parent);
-					}
-				}
+			// for all the next level
+			for(Integer child: edgeMap.get(visitedNode)){
+				// skip visited
+				if(visited.contains(child)){continue;}
+				visited.add(child);
+				q.add(child);
 			}
 		}
 		return (visited.size()==n);
 	}
-
 }
