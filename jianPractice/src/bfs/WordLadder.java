@@ -1,4 +1,4 @@
-package dynamicProgramming;
+package bfs;
 import java.util.*;
 
 
@@ -40,9 +40,23 @@ import java.util.*;
  * 	BFS + Active pruning
  *
  *
+ *
+ * //////////////////////////////////////////////////////////////////////////////////////////////////
+
+		while(...){
+			int size = q.size()
+			for( i<size){
+				q.poll();					// <--------- inside for loop
+ 			}
+ 		}
+
+
+ * //////////////////////////////////////////////////////////////////////////////////////////////////
+ *
  */
 
 public class WordLadder {
+
 
 	public int ladderLength(String beginWord, String endWord, List<String> wordList) {
 
@@ -50,35 +64,19 @@ public class WordLadder {
 		Queue<String> q = new LinkedList<>();
 		q.add(beginWord);
 
-		int levelCount = 1;
-		int currentLevelRemaining = 1;
-		int nextLevelRemaining = 0;
-		while(!q.isEmpty()){
-
-			// 1. visit head
-			String word = q.poll();
-			currentLevelRemaining--;
-
-			// 2. find at current level
-			if(word.equals(endWord)){
-				return levelCount;
-			}
-
-			// 3. visit next level
-			Set<String> children = getNextLevelUnvisited(word, wordSet);
-			q.addAll(children);
-			nextLevelRemaining+=children.size();
-
-			// 4. complete one level
-			if(currentLevelRemaining==0){
-				levelCount++;
-				currentLevelRemaining = nextLevelRemaining;
-				nextLevelRemaining = 0;
+		int levelCount=1;
+		while (!q.isEmpty()){
+			levelCount++;
+			int size = q.size();
+			for(int i=0;i<size;i++){
+				String word = q.poll();
+				Set<String> children = getNextLevelUnvisited(word, wordSet);
+				if(children.contains(endWord)){ return levelCount;}
+				if(children.size()!=0) {q.addAll(children);}
 			}
 		}
 		return 0;
 	}
-
 
 	// get all friends with distance one
 	public Set<String> getNextLevelUnvisited(String myself, Set<String> wordList){
@@ -99,5 +97,20 @@ public class WordLadder {
 			myChars = myself.toCharArray();
 		}
 		return result;
+	}
+
+
+	public static void main(String[] args){
+		WordLadder tester = new WordLadder();
+		List<String> wordList = new ArrayList<>();
+		wordList.add("hot");
+		wordList.add("dot");
+		wordList.add("dog");
+		wordList.add("lot");
+		wordList.add("log");
+		wordList.add("cog");
+		String begin = "hit";
+		String end = "cog";
+		System.out.println(tester.ladderLength(begin,end,wordList));
 	}
 }

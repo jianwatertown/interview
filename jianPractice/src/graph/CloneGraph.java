@@ -62,7 +62,7 @@ public class CloneGraph {
 				//
 				//		(friends) including the existing nodes that have been previously created
 				//
-				// map.get(node).neighbors.add(map.get(friend));
+				// map.get(node).neighbors.add(map.get(friend));   <---- duplicate statement, think about why?
 				UndirectedGraphNode copyFrd = map.get(friend);
 				copyNode.neighbors.add(copyFrd);
 			}

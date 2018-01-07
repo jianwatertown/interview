@@ -9,69 +9,42 @@ public class CourseScheduleTwo {
 
     public int[] findOrder(int numCourses, int[][] prerequisites) {
 
-        // edges and indgrees
-        Map<Integer, List> next = new LinkedHashMap<>();
-        int[] indgree = new int[numCourses];
+        int[] result = new int[numCourses];
+        int counter = -1;
+        Map<Integer,Integer> dependsCount = new HashMap<>();
+        Map<Integer,Set<Integer>> edgeMap = new HashMap<>();
+        Set<Integer> from = new HashSet<>();
 
-        // result
-        List<Integer> order = new LinkedList<>();
-        int[] result = new  int[numCourses];
+        for(int i=0;i<numCourses;i++){from.add(i);}
 
-        // 1. build the graph edage and indgrees
-        buildEdgeAndInDegrees(indgree,next,prerequisites);
-
-        // 2. getting all the indgree 0 element
-        Queue<Integer> zeroIndgreeQ = new LinkedList<>();
-        for(int i=0;i<indgree.length;i++){
-            if(indgree[i]==0){
-                zeroIndgreeQ.add(i);
-            }
+        // 1. dependsCount, edgeMap, from, to initi
+        for(int[] edge: prerequisites){
+            int fromCourse = edge[1];
+            int toCourse = edge[0];
+            // edge map
+            if(!edgeMap.containsKey(fromCourse)) {edgeMap.put(fromCourse,new HashSet<>());}
+            edgeMap.get(fromCourse).add(toCourse);
+            // from/to set
+            if(from.contains(toCourse)) {from.remove(toCourse);}
+            // depednecy count
+            if(!dependsCount.containsKey(toCourse)) {dependsCount.put(toCourse,0);}
+            dependsCount.put(toCourse,dependsCount.get(toCourse)+1);
         }
-        System.out.println(zeroIndgreeQ.size());
-        // 3. keep adding 0-indegree element to the result
-        while(!zeroIndgreeQ.isEmpty()){
-            Integer parent = zeroIndgreeQ.poll();
-            order.add(parent);
-            // 4. visit each chidlren
-            if(next.containsKey(parent)){
-                List<Integer> childrenList = next.get(parent);
-                for(Integer child: childrenList){
-                    // 5. reduce each child's indgree
-                    indgree[child]--;
-                    if(indgree[child]==0){
-                        zeroIndgreeQ.add(child);
-                    }
+
+        // 2. BFS
+        Queue<Integer> noInDegreeQ = new LinkedList<>();
+        noInDegreeQ.addAll(from);
+
+        while (!noInDegreeQ.isEmpty()){
+            Integer course = noInDegreeQ.poll();
+            result[++counter]=course;
+            if(edgeMap.containsKey(course)){
+                for(Integer child: edgeMap.get(course)){
+                    dependsCount.put(child,dependsCount.get(child)-1);
+                    if(dependsCount.get(child)==0){noInDegreeQ.add(child);}
                 }
             }
         }
-
-        if(order.size()==numCourses){
-            for(int i=0;i<order.size();i++){
-                result[i] = order.get(i);
-            }
-            return result;
-        }
-        else{
-            return new int[]{};
-        }
-    }
-
-    public void buildEdgeAndInDegrees(int[] indgree, Map<Integer,List> children, int[][] prerequisites){
-        for(int i=0;i<prerequisites.length;i++){
-            int parent = prerequisites[i][1];
-            int child = prerequisites[i][0];
-            indgree[child]++;
-            if(!children.containsKey(parent)){
-                children.put(parent,new LinkedList<Integer>());
-            }
-            children.get(parent).add(child);
-        }
-    }
-
-    public static void main(String[] args){
-        CourseScheduleTwo tester = new CourseScheduleTwo();
-        int[] result = tester.findOrder(2,new int[][] { {1,0}, {0,1}});
-        for(int i:result)
-        System.out.println(i);
+        return counter==numCourses-1?result:new int [0];
     }
 }

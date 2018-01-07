@@ -129,6 +129,7 @@ public class GraphValidTree {
 	//
 	//
 	// ------------------------------------------------------------------
+/*
 	public boolean validTreeDFS(int n, int[][] edges) {
 
 		// 1. construct tree
@@ -144,6 +145,7 @@ public class GraphValidTree {
 		Set<TreeNode> visited = new HashSet<>();
 		return dfsKnowingParent(visited,treeMap.get(edges[0][0]),null)&& (visited.size()==n);
 	}
+*/
 
 
 	// dfs and know it's parent

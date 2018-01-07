@@ -5,105 +5,68 @@ import java.util.*;
 /**
  * Created by jianwang on 2/22/17.
  *
- * Queue based topological sort
+ * BFS based topological sort
  *
  */
 public class SequenceReconstruction {
-
     public boolean sequenceReconstruction(int[] org, List<List<Integer>> seqs) {
 
-        Map<Integer,Integer> inDegree = new HashMap<>();
-        Map<Integer,Set> next = new HashMap<>();
-        Queue<Integer> zeroDegree = new LinkedList<>();
+        if(seqs.size()==0&&org.length!=0) {return false;}
+
+        Map<Integer,Integer> indegree = new HashMap<>();
+        Map<Integer,Set<Integer>> edgeMap = new HashMap<>();
         List<Integer> result = new LinkedList<>();
-        Set<Integer> singlePoint = new HashSet<>();
+        Set<Integer> oneSet = new HashSet<>();
 
-        // 1. build indegree and edges
-        for(List<Integer> edge: seqs){
-            for(int i=0;i<edge.size()-1;i++){
-                int start = edge.get(i);
-                int end = edge.get(i+1);
+        // 1. dependsCount, edgeMap, from, to init
+        for(List<Integer> seq: seqs){
+            if(seq.size()<1) {continue;}
+            if(seq.size()==1){oneSet.add(seq.get(0));continue;}
+            for(int i=0;i<seq.size()-1;i++){
+                int fromCourse = seq.get(i);
+                int toCourse = seq.get(i+1);
 
-                if(start==end) {return false;}
+                // increase indegree only when first time seeing the edge
+                if(!edgeMap.containsKey(fromCourse)|| !edgeMap.get(fromCourse).contains(toCourse)){
+                    indegree.put(toCourse,indegree.containsKey(toCourse)?indegree.get(toCourse)+1:1);
+                }
 
-                Set<Integer> startEdges = next.containsKey(start)? next.get(start): new HashSet<>();
-                // only for new edges
-                if(!startEdges.contains(end)){
+                // add to edge map
+                if(!edgeMap.containsKey(fromCourse)) {
+                    edgeMap.put(fromCourse,new HashSet<>());
+                }
+                edgeMap.get(fromCourse).add(toCourse);
+            }
+        }
 
-                    startEdges.add(end);
-                    next.put(start,startEdges);
+        // 2. BFS
+        Queue<Integer> noInDegreeQ = new LinkedList<>();
+        for(Integer fromCandidate: edgeMap.keySet()){
+            if(!indegree.containsKey(fromCandidate)) {noInDegreeQ.add(fromCandidate);}
+        }
 
-                    inDegree.put(end, inDegree.containsKey(end)?inDegree.get(end)+1:1);
+        for(Integer one: oneSet){
+            if(!indegree.containsKey(one)&&!edgeMap.keySet().contains(one)) {noInDegreeQ.add(one);}
+        }
 
-                    if(!inDegree.containsKey(start)){
-                        inDegree.put(start,0);
+        while (!noInDegreeQ.isEmpty()){
+            if(noInDegreeQ.size()>1) {return false;}            // <----- key to the algorithm
+            Integer course = noInDegreeQ.poll();
+            result.add(course);
+            if(edgeMap.containsKey(course)){
+                for(Integer child: edgeMap.get(course)){
+                    indegree.put(child,indegree.get(child)-1);
+                    if(indegree.get(child)==0){
+                        noInDegreeQ.add(child);
                     }
                 }
             }
-            if(edge.size()==1){
-                singlePoint.add(edge.get(0));
-            }
         }
 
-        // 2. find 0-degree nodes
-        for(int key:inDegree.keySet()){
-            if(inDegree.get(key)==0) {zeroDegree.add(key);}
-        }
-
-        // 3. more than 1 root or no root - bad
-        if(zeroDegree.size()>1 || singlePoint.size()>1 ||           // 2 roots
-                zeroDegree.size()==1){
-            return false;
-        }
-
-
-        // 4. remove 0-outdegree node and all the edges
-        while(!zeroDegree.isEmpty()){
-            // 5. parent
-            int parent = zeroDegree.poll();
-            result.add(parent);
-            // 6. children
-            if(next.containsKey(parent)){
-                Set<Integer> children = next.get(parent);
-                for(int child:children){
-                    inDegree.put(child,inDegree.get(child)-1);
-                    if(inDegree.get(child)==0){
-                        zeroDegree.add(child);
-                    }
-                }
-            }
-            // no way we can have 2 ways to go!
-            if(zeroDegree.size()>1){
-                return false;
-            }
-        }
-
-        // 7. validate
-        if(result.size()!=org.length){
-            return false;
-        }
+        if(result.size()!=org.length) {return false;}
         for(int i=0;i<result.size();i++){
-            if(result.get(i)!=org[i]){
-                return false;
-            }
+            if(result.get(i)!=org[i]) {return false;}
         }
         return true;
-    }
-
-
-    public static void main(String[] args){
-        SequenceReconstruction tester = new SequenceReconstruction();
-        List<List<Integer>> seqs = new LinkedList<>();
-
-        List<Integer> a = new LinkedList<>(); a.add(1);a.add(2);
-        List<Integer> b = new LinkedList<>(); b.add(2);b.add(3);
-        List<Integer> c = new LinkedList<>(); c.add(1);c.add(3);
-
-        seqs.add(a);
-        seqs.add(b);
-        seqs.add(c);
-
-        System.out.println(tester.sequenceReconstruction(
-                new int[]{1,2,3},seqs));
     }
 }
