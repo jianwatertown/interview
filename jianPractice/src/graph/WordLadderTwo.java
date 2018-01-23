@@ -47,7 +47,7 @@ public class WordLadderTwo {
         Set<String> wordSet = new HashSet<>(wordList);
         Set<String> visitedPrevious = new HashSet<>();
 
-        // 1. visit begining node
+        // 1. visit beginning node
         Map<String,Set<String>> parentMap = new HashMap<>();
         parentMap.put(beginWord,new HashSet<>());
         visitedPrevious.add(beginWord);
@@ -61,9 +61,12 @@ public class WordLadderTwo {
 
             for(int i=0;i<size;i++){
                 String word = q.poll();
+
+                // 3.1 previous level has seen the end word
                 if(word.equals(endWord)) {
                     return bfsPaths(parentMap,endWord);}
-//                    if("log".equals(word)||"dog".equals(word)){System.out.println("log/dog");}
+
+                // 3.2
                 Set<String> children = getNextLevelUnvisited(word, wordSet,visitedPrevious,visitedCurrentLevel);
                 visitedCurrentLevel.addAll(children);
                 for(String child:children){

@@ -1,6 +1,11 @@
 package recursion;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 // idea: row level recursion,
 // since each row can have only 1 queen
@@ -58,9 +63,68 @@ public class EightQueens {
 		}		
 		return true;
 	}
-	
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public List<List<String>> solveNQueens(int size){
+		int[] columns = new int[size];
+		Arrays.fill(columns,-1);	// -1 not visited
+		List<List<String>> result = new ArrayList<>();
+		dfs(columns,0,size,result);
+		return result;
+	}
+
+	public void dfs(int[] columns, int level, int size, List<List<String>> result){
+		// 1. base case
+		if(level==size) { addToResult(columns,result);}
+		// 2.
+		else{
+			for(int c=0;c<size;c++){
+				if(columns[c]==-1 && isOK(size,columns,level,c)){
+					columns[c] = level;
+					dfs(columns,level+1,size,result);
+					columns[c] = -1;
+				}
+			}
+		}
+	}
+
+	public void addToResult(int[] columns,List<List<String>> result){
+		Map<Integer,String> oneSolution = new HashMap<>();
+		for(int c=0;c<columns.length;c++){
+			int r = columns[c];
+			String str = "";
+			for(int print=0;print<columns.length;print++){
+				str+=(print==c?"Q":".");
+			}
+			oneSolution.put(r,str);
+		}
+		List<String> solution = new LinkedList<>();
+		for(int i=0;i<columns.length;i++){
+			solution.add(oneSolution.get(i));
+		}
+		result.add(solution);
+	}
+
+	public boolean isOK(int size, int[] columns, int newRow, int newColum){
+		for(int oldColumn=0;oldColumn<size;oldColumn++){
+			if(columns[oldColumn]!=-1&&Math.abs(oldColumn-newColum)==Math.abs(columns[oldColumn]-newRow)){
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static void main(String[] args){
 		EightQueens queen = new EightQueens();
-		queen.printEightQueens(8);
+//		queen.printEightQueens(8);
+		int count=0;
+		for(List<String> oneSolution:queen.solveNQueens(4)){
+			System.out.println("Solution "+count++);
+			for(String str:oneSolution){
+				System.out.println(str);
+			}
+			System.out.println("===============");
+		}
 	}
 }

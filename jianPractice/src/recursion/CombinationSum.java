@@ -30,10 +30,10 @@ public class CombinationSum {
 	// (does not satisfy certain constraints), then you backtrack: you undo certain assignments of values to variables in order to reassign them.
 	public void backtrack(List<List<Integer>> result, List<Integer> soFar, int[] nums, int remain, int start){
 
-		if(remain<0){ return;}											// backtrack
-		else if(remain==0){ result.add(new LinkedList<>(soFar));}		// found answer, remember to copy
+		if(remain<0){ return;}												// backtrack
+		else if(remain==0){ result.add(new LinkedList<>(soFar));}			// found answer, remember to copy
 		else{
-			for(int i=start;i<nums.length;i++){							// can only use start and after
+			for(int i=start;i<nums.length;i++){								// can only use start and after
 				soFar.add(nums[i]);
 				backtrack(result,soFar,nums,remain-nums[i],i);		// i and onwards
 				soFar.remove(soFar.size()-1);
