@@ -67,7 +67,7 @@ public class WordBreak {
 	}
 
 
-	// iterative, 4.18
+	// iterative, 2/7/18
 	public boolean wordBreak(String s, List<String> wordDict) {
 		if(s==null||s.length()==0) {return false;}
 		boolean[] breakable = new boolean[s.length()];
