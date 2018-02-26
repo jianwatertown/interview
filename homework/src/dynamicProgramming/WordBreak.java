@@ -72,6 +72,8 @@ public class WordBreak {
 		if(s==null||s.length()==0) {return false;}
 		boolean[] breakable = new boolean[s.length()];
 		Arrays.fill(breakable,false);
+
+		// breakdable[i] means if s(0,i) is breakable
 		for(int i=0;i<s.length();i++){
 			for(int j=0;j<=i;j++){
 				breakable[i] = (j>0?breakable[j-1]:true /*previous always breakable*/) &&

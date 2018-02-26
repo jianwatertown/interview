@@ -70,4 +70,29 @@ public class Permutations {
             soFar.remove(i);
         }
     }
+
+
+    public static void test(){
+        List<String> result = new LinkedList<>();
+        helper("abc",new StringBuffer(""),0,result);
+        for(String oneR:result){
+            System.out.println(oneR);
+        }
+    }
+
+    public static void helper(String str, StringBuffer soFar, int start, List<String> result){
+        if(start==str.length()) {
+            result.add(soFar.toString());
+            return;
+        }
+        for(int i=0;i<=soFar.length();i++){
+            soFar.insert(i,str.charAt(start));
+            helper(str,soFar,start+1,result);
+            soFar.deleteCharAt(i);
+        }
+    }
+
+    public static void main(String[] args){
+        test();
+    }
 }
