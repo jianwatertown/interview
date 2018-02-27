@@ -39,31 +39,26 @@ public class BinaryTreeVerticalOrderTraversal {
     	bfsQ.add(new Pair(root,0));
     	
     	// 3. travel through BFS
-    	int left= 0;
-    	int right = 0;
+    	int min= 0;
+    	int max = 0;
     	while(!bfsQ.isEmpty()){
+
+			// 3.1 handle children
     		Pair p = bfsQ.poll();
-    		if(p==null||p.node==null) {continue;}
-    		
-        	if(!cMap.containsKey(p.c)){
-        		ArrayList<Integer> oneColumn = new ArrayList<Integer>();
-        		oneColumn.add(p.node.val);
-        		cMap.put(p.c, oneColumn);
-        	}
-        	else{
-        		ArrayList<Integer> oneColumn = cMap.get(p.c);
-        		oneColumn.add(p.node.val);
-        	}
-        	bfsQ.add(new Pair(p.node.left,p.c-1));
-        	bfsQ.add(new Pair(p.node.right,p.c+1));
-        	left = Math.min(left, p.c-1);
-        	right = Math.max(right, p.c+1);
+    		min = Math.min(min,p.c);
+			max = Math.max(max,p.c);
+			ArrayList<Integer> oneColumn = cMap.getOrDefault(p.c,new ArrayList<>());
+			oneColumn.add(p.node.val);
+			cMap.put(p.c,oneColumn);
+
+			// 3.2 handle children
+			if(p.node.left!=null) {bfsQ.add(new Pair(p.node.left,p.c-1));}
+			if(p.node.right!=null) {bfsQ.add(new Pair(p.node.right,p.c+1));}
     	}    	
     	
-    	for(int i=left;i<=right;i++){
+    	for(int i=min;i<=max;i++){
     		if(cMap.containsKey(i)){
     			result.add(cMap.get(i));
-        
     		}
     	}
     	return result;

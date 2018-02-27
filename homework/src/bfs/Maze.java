@@ -40,7 +40,7 @@ public class Maze {
                 if (visited[xx][yy]) continue;
                 visited[xx][yy]=true;
                 if (xx==destination[0] && yy==destination[1]) return true;
-                queue.offer(new int[]{xx, yy});
+                queue.add(new int[]{xx, yy});
             }
         }
         return false;

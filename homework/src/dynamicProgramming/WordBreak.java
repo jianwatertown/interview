@@ -83,4 +83,8 @@ public class WordBreak {
 		}
 		return breakable[s.length()-1];
 	}
+
+	public boolean cici(String ceclia, String jian){
+    	return ceclia.equals(jian);
+	}
 }
